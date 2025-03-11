@@ -1,6 +1,7 @@
 
 import { Home, FileText, AlertTriangle, Users, Settings } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Link, useLocation } from "react-router-dom";
 
 const navigation = [
   { name: "Dashboard", icon: Home, href: "/" },
@@ -11,25 +12,28 @@ const navigation = [
 ];
 
 const Sidebar = () => {
+  const location = useLocation();
+  
   return (
     <aside className="hidden lg:flex h-screen w-64 flex-col fixed left-0 top-0 bg-white border-r border-gray-200">
       <div className="h-16" /> {/* Spacer for header */}
       <nav className="flex-1 space-y-1 p-4">
         {navigation.map((item) => (
-          <a
+          <Link
             key={item.name}
-            href={item.href}
+            to={item.href}
             className={cn(
               "flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg",
               "hover:bg-gray-50 transition-colors duration-200",
-              item.href === window.location.pathname
+              (location.pathname === item.href || 
+               (item.href !== '/' && location.pathname.startsWith(item.href)))
                 ? "bg-blue-50 text-blue-600"
                 : "text-gray-700"
             )}
           >
             <item.icon className="h-5 w-5" />
             {item.name}
-          </a>
+          </Link>
         ))}
       </nav>
     </aside>
