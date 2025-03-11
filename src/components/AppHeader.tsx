@@ -1,5 +1,5 @@
 
-import { Bell, Menu, Search } from "lucide-react";
+import { Bell, Menu, Search, Library } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { 
@@ -21,9 +21,12 @@ const AppHeader = () => {
           <Button variant="ghost" size="icon" className="lg:hidden">
             <Menu className="h-5 w-5" />
           </Button>
-          <h1 className="text-xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-blue-800">
-            ACCMS
-          </h1>
+          <div className="flex items-center gap-2">
+            <Library className="h-6 w-6 text-blue-600" />
+            <h1 className="text-xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-blue-800">
+              ACCMS
+            </h1>
+          </div>
         </div>
         
         <div className="flex items-center gap-6">
