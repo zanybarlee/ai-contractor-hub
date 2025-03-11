@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { FileText, AlertTriangle, Clock, Users, BarChart, TrendingUp, Activity } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import PerformanceAnalytics from "@/components/analytics/PerformanceAnalytics";
 
 const Dashboard = () => {
   const stats = [
@@ -107,6 +108,10 @@ const Dashboard = () => {
                 </CardContent>
               </Card>
             ))}
+          </div>
+
+          <div className="mt-8">
+            <PerformanceAnalytics />
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-8">
