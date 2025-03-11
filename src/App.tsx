@@ -9,6 +9,7 @@ import NotFound from "./pages/NotFound";
 import Contracts from "./pages/Contracts";
 import ContractGenerate from "./pages/ContractGenerate";
 import ContractDetails from "./pages/ContractDetails";
+import RiskManagement from "./pages/RiskManagement";
 
 const queryClient = new QueryClient();
 
@@ -21,6 +22,7 @@ const App = () => (
           <Route path="/contracts" element={<Contracts />} />
           <Route path="/contracts/generate" element={<ContractGenerate />} />
           <Route path="/contracts/:id" element={<ContractDetails />} />
+          <Route path="/risk-management" element={<RiskManagement />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
