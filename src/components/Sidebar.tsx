@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import { Link, useLocation } from "react-router-dom";
 
 const navigation = [
-  { name: "Dashboard", icon: Home, href: "/" },
+  { name: "Dashboard", icon: Home, href: "/dashboard" },
   { name: "Contracts", icon: FileText, href: "/contracts" },
   { name: "Contract Intelligence", icon: Brain, href: "/contract-intelligence" },
   { name: "Dispute Resolution", icon: Scale, href: "/dispute-resolution" },
@@ -29,7 +29,7 @@ const Sidebar = () => {
               "flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg",
               "hover:bg-gray-50 transition-colors duration-200",
               (location.pathname === item.href || 
-               (item.href !== '/' && location.pathname.startsWith(item.href)))
+               (item.href !== '/dashboard' && location.pathname.startsWith(item.href)))
                 ? "bg-blue-50 text-blue-600"
                 : "text-gray-700"
             )}
