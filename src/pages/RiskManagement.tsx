@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import AppHeader from "@/components/AppHeader";
 import Sidebar from "@/components/Sidebar";
@@ -7,7 +8,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ContractAIChatbot from "@/components/ai/ContractAIChatbot";
 import ContractMilestoneTracker from "@/components/ai/ContractMilestoneTracker";
 import ContractDocumentComparison from "@/components/ai/ContractDocumentComparison";
-import ChangeOrderManagement from "@/components/ChangeOrderManagement";
 
 const RiskManagement = () => {
   const [activeTab, setActiveTab] = useState("overview");
@@ -54,7 +54,6 @@ const RiskManagement = () => {
             <TabsList className="w-full justify-start">
               <TabsTrigger value="overview">Overview</TabsTrigger>
               <TabsTrigger value="compliance">Compliance</TabsTrigger>
-              <TabsTrigger value="change-orders">Change Orders</TabsTrigger>
               <TabsTrigger value="disputes">Dispute Prevention</TabsTrigger>
               <TabsTrigger value="ai-assistant">AI Assistant</TabsTrigger>
               <TabsTrigger value="milestones">Milestones</TabsTrigger>
@@ -74,10 +73,6 @@ const RiskManagement = () => {
                   <p className="text-muted-foreground">Compliance monitoring dashboard coming soon...</p>
                 </CardContent>
               </Card>
-            </TabsContent>
-
-            <TabsContent value="change-orders">
-              <ChangeOrderManagement />
             </TabsContent>
 
             <TabsContent value="disputes">
