@@ -1,17 +1,27 @@
+
 import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { AlertTriangle } from "lucide-react";
 import AppHeader from "@/components/AppHeader";
 import Sidebar from "@/components/Sidebar";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import RiskMonitoring from "@/components/RiskMonitoring";
 import ContractHeader from "@/components/contract/ContractHeader";
 import ContractMetrics from "@/components/contract/ContractMetrics";
 import ContractClausesTab from "@/components/contract/tabs/ContractClausesTab";
 import ContractNegotiationTab from "@/components/contract/tabs/ContractNegotiationTab";
+import ContractDisputeResolutionTab from "@/components/contract/tabs/ContractDisputeResolutionTab";
 import { sampleContracts } from "@/lib/contracts";
+
+// Helper function for formatting currency
+const formatCurrency = (value: number, currency: string) => {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: currency,
+  }).format(value);
+};
 
 const ContractDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -36,6 +46,7 @@ const ContractDetails = () => {
   }
 
   const riskMonitoringData = {
+    contractId: contract.id,
     riskScore: 75,
     complianceScore: 85,
     alerts: [
@@ -84,11 +95,12 @@ const ContractDetails = () => {
           />
 
           <Tabs defaultValue="overview" value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="grid grid-cols-5 mb-6">
+            <TabsList className="grid grid-cols-6 mb-6">
               <TabsTrigger value="overview">Overview</TabsTrigger>
               <TabsTrigger value="clauses">Clauses Analysis</TabsTrigger>
               <TabsTrigger value="risk">Risk & Compliance</TabsTrigger>
               <TabsTrigger value="negotiation">Negotiation</TabsTrigger>
+              <TabsTrigger value="disputes">Dispute Resolution</TabsTrigger>
               <TabsTrigger value="history">Version History</TabsTrigger>
             </TabsList>
 
@@ -159,6 +171,10 @@ const ContractDetails = () => {
 
             <TabsContent value="negotiation" className="space-y-6">
               <ContractNegotiationTab />
+            </TabsContent>
+            
+            <TabsContent value="disputes" className="space-y-6">
+              <ContractDisputeResolutionTab />
             </TabsContent>
 
             <TabsContent value="history" className="space-y-6">
