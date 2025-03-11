@@ -24,6 +24,7 @@ interface HeroSectionProps {
   setRole: (value: string) => void;
   handleAuth: (e: React.FormEvent) => void;
   setIsSignIn: (value: boolean) => void;
+  openRoleModal: () => void;
 }
 
 const HeroSection: React.FC<HeroSectionProps> = ({ 
@@ -35,36 +36,15 @@ const HeroSection: React.FC<HeroSectionProps> = ({
   role, 
   setRole, 
   handleAuth, 
-  setIsSignIn 
+  setIsSignIn,
+  openRoleModal
 }) => {
-  const [isRoleModalOpen, setIsRoleModalOpen] = useState(false);
-  
-  const openRoleModal = () => {
-    setIsRoleModalOpen(true);
-  };
-
-  const handleRoleSelect = (value: string) => {
-    setRole(value);
-  };
-
-  const handleRoleConfirm = () => {
-    setIsRoleModalOpen(false);
-  };
-
-  // Find the selected role object
+  // Remove the local state and modal handling
   const selectedRole = roles.find(r => r.value === role);
 
   return (
     <div className="container mx-auto px-4 py-16 md:py-24 flex flex-col md:flex-row items-center justify-between gap-12">
-      {/* Role Selection Modal */}
-      <RoleSelectionModal
-        open={isRoleModalOpen}
-        onOpenChange={setIsRoleModalOpen}
-        selectedRole={role}
-        onRoleSelect={handleRoleSelect}
-        onConfirm={handleRoleConfirm}
-      />
-      
+      {/* Left side content */}
       <div className="md:w-1/2 space-y-6">
         <h2 className="text-4xl md:text-5xl font-bold leading-tight">
           Advanced Construction Contract Management System
@@ -93,6 +73,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({
         </div>
       </div>
       
+      {/* Right side form */}
       <div className="md:w-1/2 w-full max-w-md">
         <Card className="w-full shadow-lg bg-white/5 backdrop-blur-lg border-white/10">
           <CardHeader>

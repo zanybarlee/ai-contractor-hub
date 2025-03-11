@@ -1,3 +1,4 @@
+
 import React from "react";
 import { 
   Dialog,
@@ -85,6 +86,8 @@ interface RoleSelectionModalProps {
   selectedRole: string;
   onRoleSelect: (role: string) => void;
   onConfirm: () => void;
+  isSignInMode?: boolean;
+  onSignIn?: (role: string) => void;
 }
 
 const RoleSelectionModal = ({
@@ -93,14 +96,20 @@ const RoleSelectionModal = ({
   selectedRole,
   onRoleSelect,
   onConfirm,
+  isSignInMode = false,
+  onSignIn,
 }: RoleSelectionModalProps) => {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[625px] max-h-[80vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="text-xl font-bold">Select Your Role</DialogTitle>
+          <DialogTitle className="text-xl font-bold">
+            {isSignInMode ? "Sign In to Your Account" : "Select Your Role"}
+          </DialogTitle>
           <DialogDescription>
-            Choose the role that best describes your position in the construction industry
+            {isSignInMode 
+              ? "Choose your role to sign in to the construction management system" 
+              : "Choose the role that best describes your position in the construction industry"}
           </DialogDescription>
         </DialogHeader>
         
@@ -112,25 +121,28 @@ const RoleSelectionModal = ({
                 role={role}
                 isSelected={selectedRole === role.value}
                 onSelect={onRoleSelect}
+                onSignIn={isSignInMode ? onSignIn : undefined}
               />
             ))}
           </RadioGroup>
         </div>
         
-        <div className="flex justify-end gap-3 mt-4">
-          <Button 
-            variant="outline" 
-            onClick={() => onOpenChange(false)}
-          >
-            Cancel
-          </Button>
-          <Button 
-            onClick={onConfirm}
-            disabled={!selectedRole}
-          >
-            Confirm Selection
-          </Button>
-        </div>
+        {!isSignInMode && (
+          <div className="flex justify-end gap-3 mt-4">
+            <Button 
+              variant="outline" 
+              onClick={() => onOpenChange(false)}
+            >
+              Cancel
+            </Button>
+            <Button 
+              onClick={onConfirm}
+              disabled={!selectedRole}
+            >
+              Confirm Selection
+            </Button>
+          </div>
+        )}
       </DialogContent>
     </Dialog>
   );

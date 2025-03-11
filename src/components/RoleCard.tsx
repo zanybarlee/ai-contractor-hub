@@ -9,9 +9,22 @@ interface RoleCardProps {
   role: Role;
   isSelected: boolean;
   onSelect: (value: string) => void;
+  onSignIn?: (role: string) => void;
 }
 
-const RoleCard: React.FC<RoleCardProps> = ({ role, isSelected, onSelect }) => {
+const RoleCard: React.FC<RoleCardProps> = ({ 
+  role, 
+  isSelected, 
+  onSelect, 
+  onSignIn 
+}) => {
+  const handleCardClick = () => {
+    onSelect(role.value);
+    if (onSignIn) {
+      onSignIn(role.value);
+    }
+  };
+
   return (
     <div className="flex items-start space-x-2">
       <RadioGroupItem 
@@ -22,6 +35,7 @@ const RoleCard: React.FC<RoleCardProps> = ({ role, isSelected, onSelect }) => {
       <Label 
         htmlFor={role.value} 
         className="flex-1 cursor-pointer"
+        onClick={handleCardClick}
       >
         <Card 
           className={`hover:border-primary transition-colors ${

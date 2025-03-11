@@ -5,9 +5,19 @@ import { Button } from "@/components/ui/button";
 interface LandingHeaderProps {
   isSignIn: boolean;
   setIsSignIn: (value: boolean) => void;
+  openRoleModal: () => void;
 }
 
-const LandingHeader: React.FC<LandingHeaderProps> = ({ isSignIn, setIsSignIn }) => {
+const LandingHeader: React.FC<LandingHeaderProps> = ({ 
+  isSignIn, 
+  setIsSignIn, 
+  openRoleModal 
+}) => {
+  const handleSignIn = () => {
+    setIsSignIn(true);
+    openRoleModal();
+  };
+
   return (
     <div className="container mx-auto px-4 py-8 flex justify-between items-center">
       <h1 className="text-2xl font-bold">ACCMS</h1>
@@ -15,7 +25,7 @@ const LandingHeader: React.FC<LandingHeaderProps> = ({ isSignIn, setIsSignIn }) 
         <Button 
           variant="ghost" 
           className="text-white hover:bg-blue-700" 
-          onClick={() => setIsSignIn(true)}
+          onClick={handleSignIn}
         >
           Sign In
         </Button>
