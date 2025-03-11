@@ -6,8 +6,6 @@ import RiskMonitoring from "@/components/RiskMonitoring";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ContractAIChatbot from "@/components/ai/ContractAIChatbot";
-import ContractMilestoneTracker from "@/components/ai/ContractMilestoneTracker";
-import ContractDocumentComparison from "@/components/ai/ContractDocumentComparison";
 import ComplianceMonitoring from "@/components/ComplianceMonitoring";
 import DisputePrevention from "@/components/DisputePrevention";
 
@@ -58,8 +56,6 @@ const RiskManagement = () => {
               <TabsTrigger value="compliance">Compliance</TabsTrigger>
               <TabsTrigger value="disputes">Dispute Prevention</TabsTrigger>
               <TabsTrigger value="ai-assistant">AI Assistant</TabsTrigger>
-              <TabsTrigger value="milestones">Milestones</TabsTrigger>
-              <TabsTrigger value="document-comparison">Document Comparison</TabsTrigger>
             </TabsList>
 
             <TabsContent value="overview">
@@ -78,14 +74,6 @@ const RiskManagement = () => {
               <div className="h-[600px]">
                 <ContractAIChatbot initialMessage="Welcome to the Contract Intelligence Assistant! I can help you with contract analysis, risk assessment, and legal guidance. What would you like to know about your contracts?" />
               </div>
-            </TabsContent>
-
-            <TabsContent value="milestones">
-              <ContractMilestoneTracker contractId="c001" />
-            </TabsContent>
-
-            <TabsContent value="document-comparison">
-              <ContractDocumentComparison />
             </TabsContent>
           </Tabs>
         </div>
