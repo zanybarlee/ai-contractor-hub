@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Check, AlertTriangle, ShieldCheck, CalendarClock, Building, Gauge, Bell } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -111,7 +110,10 @@ const ComplianceMonitoring = () => {
                   <span className="text-sm font-medium">Building Codes</span>
                   <span className="text-sm font-medium">{complianceStats.building}%</span>
                 </div>
-                <Progress value={complianceStats.building} className="bg-blue-100" indicatorClassName="bg-blue-600" />
+                <Progress 
+                  value={complianceStats.building} 
+                  className="[&>div]:bg-blue-600 bg-blue-100" 
+                />
               </div>
               
               <div className="space-y-2">
@@ -119,7 +121,10 @@ const ComplianceMonitoring = () => {
                   <span className="text-sm font-medium">Safety Regulations</span>
                   <span className="text-sm font-medium">{complianceStats.safety}%</span>
                 </div>
-                <Progress value={complianceStats.safety} className="bg-green-100" indicatorClassName="bg-green-600" />
+                <Progress 
+                  value={complianceStats.safety} 
+                  className="[&>div]:bg-green-600 bg-green-100" 
+                />
               </div>
               
               <div className="space-y-2">
@@ -127,7 +132,10 @@ const ComplianceMonitoring = () => {
                   <span className="text-sm font-medium">Environmental</span>
                   <span className="text-sm font-medium">{complianceStats.environmental}%</span>
                 </div>
-                <Progress value={complianceStats.environmental} className="bg-yellow-100" indicatorClassName="bg-yellow-600" />
+                <Progress 
+                  value={complianceStats.environmental} 
+                  className="[&>div]:bg-yellow-600 bg-yellow-100" 
+                />
               </div>
               
               <div className="space-y-2">
@@ -135,7 +143,10 @@ const ComplianceMonitoring = () => {
                   <span className="text-sm font-medium">Labor Laws</span>
                   <span className="text-sm font-medium">{complianceStats.labor}%</span>
                 </div>
-                <Progress value={complianceStats.labor} className="bg-purple-100" indicatorClassName="bg-purple-600" />
+                <Progress 
+                  value={complianceStats.labor} 
+                  className="[&>div]:bg-purple-600 bg-purple-100" 
+                />
               </div>
             </div>
           </CardContent>
@@ -256,3 +267,4 @@ const ComplianceMonitoring = () => {
 };
 
 export default ComplianceMonitoring;
+
