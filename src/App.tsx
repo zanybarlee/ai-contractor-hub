@@ -13,6 +13,8 @@ import RiskManagement from "./pages/RiskManagement";
 import ChangeOrders from "./pages/ChangeOrders";
 import ContractIntelligence from "./pages/ContractIntelligence";
 import DisputeResolution from "./pages/DisputeResolution";
+import Collaboration from "./pages/Collaboration";
+import Settings from "./pages/Settings";
 
 const queryClient = new QueryClient();
 
@@ -29,6 +31,8 @@ const App = () => (
           <Route path="/dispute-resolution" element={<DisputeResolution />} />
           <Route path="/risk-management" element={<RiskManagement />} />
           <Route path="/change-orders" element={<ChangeOrders />} />
+          <Route path="/collaboration" element={<Collaboration />} />
+          <Route path="/settings" element={<Settings />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
