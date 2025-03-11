@@ -21,6 +21,8 @@ const RoleCard: React.FC<RoleCardProps> = ({
   const handleCardClick = () => {
     onSelect(role.value);
     if (onSignIn) {
+      // Store role in localStorage before signing in
+      localStorage.setItem('userRole', role.value);
       onSignIn(role.value);
     }
   };
