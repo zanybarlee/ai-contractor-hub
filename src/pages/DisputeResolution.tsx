@@ -4,6 +4,7 @@ import AppHeader from "@/components/AppHeader";
 import Sidebar from "@/components/Sidebar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import ContractDisputeResolutionTab from "@/components/contract/tabs/ContractDisputeResolutionTab";
+import { Toaster } from "@/components/ui/toaster";
 
 const DisputeResolution = () => {
   return (
@@ -30,6 +31,7 @@ const DisputeResolution = () => {
           </Card>
         </div>
       </main>
+      <Toaster />
     </div>
   );
 };
