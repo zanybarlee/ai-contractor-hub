@@ -8,6 +8,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ContractAIChatbot from "@/components/ai/ContractAIChatbot";
 import ContractMilestoneTracker from "@/components/ai/ContractMilestoneTracker";
 import ContractDocumentComparison from "@/components/ai/ContractDocumentComparison";
+import ComplianceMonitoring from "@/components/ComplianceMonitoring";
+import DisputePrevention from "@/components/DisputePrevention";
 
 const RiskManagement = () => {
   const [activeTab, setActiveTab] = useState("overview");
@@ -65,25 +67,11 @@ const RiskManagement = () => {
             </TabsContent>
 
             <TabsContent value="compliance">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Compliance Monitoring</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground">Compliance monitoring dashboard coming soon...</p>
-                </CardContent>
-              </Card>
+              <ComplianceMonitoring />
             </TabsContent>
 
             <TabsContent value="disputes">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Dispute Prevention</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground">Dispute prevention tools coming soon...</p>
-                </CardContent>
-              </Card>
+              <DisputePrevention />
             </TabsContent>
 
             <TabsContent value="ai-assistant">
