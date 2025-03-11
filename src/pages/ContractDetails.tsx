@@ -20,6 +20,9 @@ import ContractClausesTab from "@/components/contract/tabs/ContractClausesTab";
 import ContractVersionHistoryTab from "@/components/contract/tabs/ContractVersionHistoryTab";
 import ContractNegotiationTab from "@/components/contract/tabs/ContractNegotiationTab";
 import ContractDisputeResolutionTab from "@/components/contract/tabs/ContractDisputeResolutionTab";
+import ContractAIChatbot from "@/components/ai/ContractAIChatbot";
+import ContractMilestoneTracker from "@/components/ai/ContractMilestoneTracker";
+import ContractDocumentComparison from "@/components/ai/ContractDocumentComparison";
 
 const ContractDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -66,12 +69,14 @@ const ContractDetails = () => {
           />
 
           <Tabs defaultValue="overview" value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="grid grid-cols-6 mb-6">
+            <TabsList className="grid grid-cols-8 mb-6">
               <TabsTrigger value="overview">Overview</TabsTrigger>
               <TabsTrigger value="clauses">Clauses Analysis</TabsTrigger>
               <TabsTrigger value="risk">Risk & Compliance</TabsTrigger>
               <TabsTrigger value="negotiation">Negotiation</TabsTrigger>
               <TabsTrigger value="disputes">Dispute Resolution</TabsTrigger>
+              <TabsTrigger value="ai-assistant">AI Assistant</TabsTrigger>
+              <TabsTrigger value="milestones">Milestones</TabsTrigger>
               <TabsTrigger value="history">Version History</TabsTrigger>
             </TabsList>
 
@@ -96,6 +101,19 @@ const ContractDetails = () => {
             
             <TabsContent value="disputes" className="space-y-6">
               <ContractDisputeResolutionTab />
+            </TabsContent>
+
+            <TabsContent value="ai-assistant" className="space-y-6">
+              <div className="h-[600px]">
+                <ContractAIChatbot 
+                  contractId={contract.id}
+                  initialMessage={`Hello! I can help you with questions about the "${contract.title}" contract. Feel free to ask about payment terms, warranties, or any specific clauses.`}
+                />
+              </div>
+            </TabsContent>
+
+            <TabsContent value="milestones" className="space-y-6">
+              <ContractMilestoneTracker contractId={contract.id} />
             </TabsContent>
 
             <TabsContent value="history" className="space-y-6">
