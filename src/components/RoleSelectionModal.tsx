@@ -1,4 +1,3 @@
-
 import React from "react";
 import { 
   Dialog,
@@ -7,13 +6,8 @@ import {
   DialogTitle,
   DialogDescription
 } from "@/components/ui/dialog";
-import { 
-  Card,
-  CardContent
-} from "@/components/ui/card";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { RadioGroup } from "@/components/ui/radio-group";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
 import { 
   Building2, 
   Users, 
@@ -23,6 +17,7 @@ import {
   ShoppingCart,
   ClipboardCheck
 } from "lucide-react";
+import RoleCard from "@/components/RoleCard";
 
 export interface Role {
   value: string;
@@ -112,33 +107,12 @@ const RoleSelectionModal = ({
         <div className="py-4">
           <RadioGroup value={selectedRole} onValueChange={onRoleSelect} className="grid gap-4">
             {roles.map((role) => (
-              <div key={role.value} className="flex items-start space-x-2">
-                <RadioGroupItem 
-                  value={role.value} 
-                  id={role.value}
-                  className="mt-3"
-                />
-                <Label 
-                  htmlFor={role.value} 
-                  className="flex-1 cursor-pointer"
-                >
-                  <Card 
-                    className={`hover:border-primary transition-colors ${
-                      selectedRole === role.value ? "border-primary" : ""
-                    }`}
-                  >
-                    <CardContent className="p-4 flex items-center gap-4">
-                      <div className={`p-3 rounded-full ${role.color}`}>
-                        {role.icon}
-                      </div>
-                      <div className="flex-1">
-                        <h3 className="font-medium text-lg">{role.label}</h3>
-                        <p className="text-sm text-gray-500">{role.description}</p>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </Label>
-              </div>
+              <RoleCard 
+                key={role.value}
+                role={role}
+                isSelected={selectedRole === role.value}
+                onSelect={onRoleSelect}
+              />
             ))}
           </RadioGroup>
         </div>
