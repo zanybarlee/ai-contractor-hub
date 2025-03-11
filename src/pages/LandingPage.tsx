@@ -68,8 +68,8 @@ const LandingPage = () => {
         : `Your account has been created with role: ${role}`,
     });
     
-    // Navigate to dashboard
-    navigate("/contracts");
+    // Navigate to dashboard instead of contracts
+    navigate("/dashboard");
   };
 
   return (
