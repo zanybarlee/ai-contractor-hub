@@ -6,6 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ContractAIChatbot from "@/components/ai/ContractAIChatbot";
 import ContractMilestoneTracker from "@/components/ai/ContractMilestoneTracker";
 import ContractDocumentComparison from "@/components/ai/ContractDocumentComparison";
+import ContractDisputeResolutionTab from "@/components/contract/tabs/ContractDisputeResolutionTab";
 
 const ContractIntelligence = () => {
   const [activeTab, setActiveTab] = useState("chatbot");
@@ -24,6 +25,7 @@ const ContractIntelligence = () => {
               <TabsTrigger value="chatbot">AI Chatbot</TabsTrigger>
               <TabsTrigger value="milestones">Milestone Tracking</TabsTrigger>
               <TabsTrigger value="document-comparison">Document Analysis</TabsTrigger>
+              <TabsTrigger value="dispute-resolution">Dispute Resolution</TabsTrigger>
             </TabsList>
 
             <TabsContent value="chatbot">
@@ -38,6 +40,10 @@ const ContractIntelligence = () => {
 
             <TabsContent value="document-comparison">
               <ContractDocumentComparison />
+            </TabsContent>
+
+            <TabsContent value="dispute-resolution">
+              <ContractDisputeResolutionTab />
             </TabsContent>
           </Tabs>
         </div>
