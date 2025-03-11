@@ -5,13 +5,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { 
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from "@/components/ui/select";
-import { 
   Card, 
   CardContent, 
   CardFooter, 
@@ -30,12 +23,14 @@ import {
   Building 
 } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
+import RoleSelectionModal, { roles } from "@/components/RoleSelectionModal";
 
 const LandingPage = () => {
   const [isSignIn, setIsSignIn] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("");
+  const [isRoleModalOpen, setIsRoleModalOpen] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -72,19 +67,32 @@ const LandingPage = () => {
     navigate("/dashboard");
   };
 
-  // List of roles for both sign in and sign up
-  const roles = [
-    { value: "general_contractor", label: "General Contractor" },
-    { value: "subcontractor", label: "Subcontractor" },
-    { value: "project_owner", label: "Project Owner" },
-    { value: "legal_team", label: "Construction Legal Team" },
-    { value: "contract_admin", label: "Contract Administrator" },
-    { value: "procurement", label: "Procurement Officer" },
-    { value: "government", label: "Government & Regulatory" },
-  ];
+  const openRoleModal = () => {
+    setIsRoleModalOpen(true);
+  };
+
+  const handleRoleSelect = (value: string) => {
+    setRole(value);
+  };
+
+  const handleRoleConfirm = () => {
+    setIsRoleModalOpen(false);
+  };
+
+  // Find the selected role object
+  const selectedRole = roles.find(r => r.value === role);
 
   return (
     <div className="min-h-screen flex flex-col">
+      {/* Role Selection Modal */}
+      <RoleSelectionModal
+        open={isRoleModalOpen}
+        onOpenChange={setIsRoleModalOpen}
+        selectedRole={role}
+        onRoleSelect={handleRoleSelect}
+        onConfirm={handleRoleConfirm}
+      />
+      
       {/* Hero Section */}
       <header className="bg-gradient-to-r from-blue-600 to-blue-800 text-white">
         <div className="container mx-auto px-4 py-8 flex justify-between items-center">
@@ -174,18 +182,26 @@ const LandingPage = () => {
                   
                   <div className="space-y-2">
                     <Label htmlFor="role" className="text-white">Role</Label>
-                    <Select onValueChange={setRole} value={role}>
-                      <SelectTrigger className="bg-white/10 border-white/20 text-white">
-                        <SelectValue placeholder="Select your role" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {roles.map((role) => (
-                          <SelectItem key={role.value} value={role.value}>
-                            {role.label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                    <Button 
+                      type="button"
+                      variant="outline" 
+                      className="w-full bg-white/10 border-white/20 text-white justify-between font-normal"
+                      onClick={openRoleModal}
+                    >
+                      <span className="flex items-center gap-2">
+                        {selectedRole ? (
+                          <>
+                            <div className={`p-1 rounded-full ${selectedRole.color}`}>
+                              {selectedRole.icon}
+                            </div>
+                            <span>{selectedRole.label}</span>
+                          </>
+                        ) : (
+                          "Select your role"
+                        )}
+                      </span>
+                      <span>▼</span>
+                    </Button>
                   </div>
                 </CardContent>
                 <CardFooter>
