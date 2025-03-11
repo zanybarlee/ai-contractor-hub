@@ -15,6 +15,7 @@ import ContractIntelligence from "./pages/ContractIntelligence";
 import DisputeResolution from "./pages/DisputeResolution";
 import Collaboration from "./pages/Collaboration";
 import Settings from "./pages/Settings";
+import LandingPage from "./pages/LandingPage";
 
 const queryClient = new QueryClient();
 
@@ -23,7 +24,8 @@ const App = () => (
     <TooltipProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Index />} />
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/dashboard" element={<Index />} />
           <Route path="/contracts" element={<Contracts />} />
           <Route path="/contracts/generate" element={<ContractGenerate />} />
           <Route path="/contracts/:id" element={<ContractDetails />} />
