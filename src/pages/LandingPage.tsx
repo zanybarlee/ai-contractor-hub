@@ -51,7 +51,7 @@ const LandingPage = () => {
       return;
     }
     
-    if (!isSignIn && !role) {
+    if (!role) {
       toast({
         title: "Error",
         description: "Please select your role",
@@ -64,13 +64,24 @@ const LandingPage = () => {
     toast({
       title: isSignIn ? "Welcome back!" : "Account created",
       description: isSignIn 
-        ? "You have successfully signed in" 
+        ? `You have successfully signed in as ${role}` 
         : `Your account has been created with role: ${role}`,
     });
     
-    // Navigate to dashboard instead of contracts
+    // Navigate to dashboard
     navigate("/dashboard");
   };
+
+  // List of roles for both sign in and sign up
+  const roles = [
+    { value: "general_contractor", label: "General Contractor" },
+    { value: "subcontractor", label: "Subcontractor" },
+    { value: "project_owner", label: "Project Owner" },
+    { value: "legal_team", label: "Construction Legal Team" },
+    { value: "contract_admin", label: "Contract Administrator" },
+    { value: "procurement", label: "Procurement Officer" },
+    { value: "government", label: "Government & Regulatory" },
+  ];
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -161,25 +172,21 @@ const LandingPage = () => {
                     />
                   </div>
                   
-                  {!isSignIn && (
-                    <div className="space-y-2">
-                      <Label htmlFor="role" className="text-white">Role</Label>
-                      <Select onValueChange={setRole}>
-                        <SelectTrigger className="bg-white/10 border-white/20 text-white">
-                          <SelectValue placeholder="Select your role" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="general_contractor">General Contractor</SelectItem>
-                          <SelectItem value="subcontractor">Subcontractor</SelectItem>
-                          <SelectItem value="project_owner">Project Owner</SelectItem>
-                          <SelectItem value="legal_team">Construction Legal Team</SelectItem>
-                          <SelectItem value="contract_admin">Contract Administrator</SelectItem>
-                          <SelectItem value="procurement">Procurement Officer</SelectItem>
-                          <SelectItem value="government">Government & Regulatory</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  )}
+                  <div className="space-y-2">
+                    <Label htmlFor="role" className="text-white">Role</Label>
+                    <Select onValueChange={setRole} value={role}>
+                      <SelectTrigger className="bg-white/10 border-white/20 text-white">
+                        <SelectValue placeholder="Select your role" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {roles.map((role) => (
+                          <SelectItem key={role.value} value={role.value}>
+                            {role.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
                 </CardContent>
                 <CardFooter>
                   <Button type="submit" className="w-full bg-white text-blue-700 hover:bg-white/90">
