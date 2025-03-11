@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,6 +12,7 @@ import {
 } from "@/components/ui/card";
 import { CheckCircle } from "lucide-react";
 import { roles } from "@/components/RoleSelectionModal";
+import { useToast } from "@/hooks/use-toast";
 
 interface HeroSectionProps {
   isSignIn: boolean;
@@ -39,13 +39,20 @@ const HeroSection: React.FC<HeroSectionProps> = ({
   setIsSignIn,
   openRoleModal
 }) => {
+  const { toast } = useToast();
+
   const handleSignInClick = (e: React.FormEvent) => {
     e.preventDefault();
     
     if (isSignIn) {
-      // If signing in, open the role modal directly
+      // If signing in, validate fields before opening the role modal
       if (!email || !password) {
-        return; // Let form validation handle this
+        toast({
+          title: "Missing information",
+          description: "Please enter both email and password",
+          variant: "destructive",
+        });
+        return;
       }
       openRoleModal();
     } else {
@@ -56,7 +63,6 @@ const HeroSection: React.FC<HeroSectionProps> = ({
 
   return (
     <div className="container mx-auto px-4 py-16 md:py-24 flex flex-col md:flex-row items-center justify-between gap-12">
-      {/* Left side content */}
       <div className="md:w-1/2 space-y-6">
         <h2 className="text-4xl md:text-5xl font-bold leading-tight">
           Advanced Construction Contract Management System
@@ -85,7 +91,6 @@ const HeroSection: React.FC<HeroSectionProps> = ({
         </div>
       </div>
       
-      {/* Right side form */}
       <div className="md:w-1/2 w-full max-w-md">
         <Card className="w-full shadow-lg bg-white/5 backdrop-blur-lg border-white/10">
           <CardHeader>
@@ -108,6 +113,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({
                   className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  required
                 />
               </div>
               <div className="space-y-2">
@@ -119,10 +125,10 @@ const HeroSection: React.FC<HeroSectionProps> = ({
                   className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  required
                 />
               </div>
               
-              {/* Role field removed from sign-in form */}
               {!isSignIn && (
                 <div className="space-y-2">
                   <Label htmlFor="role" className="text-white">Role</Label>
