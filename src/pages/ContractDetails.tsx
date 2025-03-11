@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { ChevronLeft, FileText, AlertTriangle, History, MessageSquare, Download, Share2, Pencil } from "lucide-react";
@@ -12,6 +11,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
 import { sampleContracts } from "@/lib/contracts";
 import { cn } from "@/lib/utils";
+import RiskMonitoring from "@/components/RiskMonitoring";
 
 const ContractDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -19,7 +19,7 @@ const ContractDetails = () => {
   const contract = sampleContracts.find(c => c.id === id);
   const [activeTab, setActiveTab] = useState("overview");
   const [negotiationComments, setNegotiationComments] = useState("");
-  
+
   if (!contract) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -66,6 +66,34 @@ const ContractDetails = () => {
       title: "Alternative Generated",
       description: "AI has generated an alternative clause for review.",
     });
+  };
+
+  const riskMonitoringData = {
+    riskScore: 75,
+    complianceScore: 85,
+    alerts: [
+      {
+        id: '1',
+        type: 'risk' as const,
+        severity: 'high' as const,
+        message: 'Liquidated damages clause exceeds industry standard by 25%. High risk of dispute.',
+        timestamp: new Date().toISOString(),
+      },
+      {
+        id: '2',
+        type: 'compliance' as const,
+        severity: 'medium' as const,
+        message: 'Recent updates to local building codes affect Section 3.2. Review required.',
+        timestamp: new Date().toISOString(),
+      },
+      {
+        id: '3',
+        type: 'dispute' as const,
+        severity: 'low' as const,
+        message: 'AI analysis predicts 15% chance of payment dispute based on similar projects.',
+        timestamp: new Date().toISOString(),
+      },
+    ],
   };
 
   return (
@@ -166,9 +194,10 @@ const ContractDetails = () => {
           </div>
 
           <Tabs defaultValue="overview" value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="grid grid-cols-4 mb-6">
+            <TabsList className="grid grid-cols-5 mb-6">
               <TabsTrigger value="overview">Overview</TabsTrigger>
               <TabsTrigger value="clauses">Clauses Analysis</TabsTrigger>
+              <TabsTrigger value="risk">Risk & Compliance</TabsTrigger>
               <TabsTrigger value="negotiation">Negotiation</TabsTrigger>
               <TabsTrigger value="history">Version History</TabsTrigger>
             </TabsList>
@@ -287,6 +316,13 @@ const ContractDetails = () => {
                   </CardContent>
                 </Card>
               ))}
+            </TabsContent>
+
+            <TabsContent value="risk" className="space-y-6">
+              <RiskMonitoring
+                contractId={contract.id}
+                {...riskMonitoringData}
+              />
             </TabsContent>
 
             <TabsContent value="negotiation" className="space-y-6">
