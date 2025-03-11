@@ -1,7 +1,9 @@
 
-import { Home, FileText, AlertTriangle, Users, Settings, GitBranch, Brain, Scale } from "lucide-react";
+import { Home, FileText, AlertTriangle, Users, Settings, GitBranch, Brain, Scale, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
 
 const navigation = [
   { name: "Dashboard", icon: Home, href: "/dashboard" },
@@ -16,6 +18,17 @@ const navigation = [
 
 const Sidebar = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { toast } = useToast();
+  
+  const handleSignOut = () => {
+    // In a real app, we would clear auth tokens/state here
+    toast({
+      title: "Signed out",
+      description: "You have been successfully signed out.",
+    });
+    navigate("/");
+  };
   
   return (
     <aside className="hidden lg:flex h-screen w-64 flex-col fixed left-0 top-0 bg-white border-r border-gray-200">
@@ -39,6 +52,18 @@ const Sidebar = () => {
           </Link>
         ))}
       </nav>
+      
+      {/* Sign Out Footer */}
+      <div className="p-4 border-t border-gray-200">
+        <Button 
+          variant="ghost" 
+          className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50"
+          onClick={handleSignOut}
+        >
+          <LogOut className="h-5 w-5 mr-3" />
+          Sign Out
+        </Button>
+      </div>
     </aside>
   );
 };
