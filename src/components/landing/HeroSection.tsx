@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -12,7 +12,7 @@ import {
   CardDescription
 } from "@/components/ui/card";
 import { CheckCircle } from "lucide-react";
-import RoleSelectionModal, { roles } from "@/components/RoleSelectionModal";
+import { roles } from "@/components/RoleSelectionModal";
 
 interface HeroSectionProps {
   isSignIn: boolean;
@@ -39,8 +39,20 @@ const HeroSection: React.FC<HeroSectionProps> = ({
   setIsSignIn,
   openRoleModal
 }) => {
-  // Remove the local state and modal handling
-  const selectedRole = roles.find(r => r.value === role);
+  const handleSignInClick = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (isSignIn) {
+      // If signing in, open the role modal directly
+      if (!email || !password) {
+        return; // Let form validation handle this
+      }
+      openRoleModal();
+    } else {
+      // If signing up, proceed with normal form submission
+      handleAuth(e);
+    }
+  };
 
   return (
     <div className="container mx-auto px-4 py-16 md:py-24 flex flex-col md:flex-row items-center justify-between gap-12">
@@ -85,7 +97,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({
               }
             </CardDescription>
           </CardHeader>
-          <form onSubmit={handleAuth}>
+          <form onSubmit={handleSignInClick}>
             <CardContent className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="email" className="text-white">Email</Label>
@@ -110,29 +122,32 @@ const HeroSection: React.FC<HeroSectionProps> = ({
                 />
               </div>
               
-              <div className="space-y-2">
-                <Label htmlFor="role" className="text-white">Role</Label>
-                <Button 
-                  type="button"
-                  variant="outline" 
-                  className="w-full bg-white/10 border-white/20 text-white justify-between font-normal"
-                  onClick={openRoleModal}
-                >
-                  <span className="flex items-center gap-2">
-                    {selectedRole ? (
-                      <>
-                        <div className={`p-1 rounded-full ${selectedRole.color}`}>
-                          {selectedRole.icon}
-                        </div>
-                        <span>{selectedRole.label}</span>
-                      </>
-                    ) : (
-                      "Select your role"
-                    )}
-                  </span>
-                  <span>▼</span>
-                </Button>
-              </div>
+              {/* Role field removed from sign-in form */}
+              {!isSignIn && (
+                <div className="space-y-2">
+                  <Label htmlFor="role" className="text-white">Role</Label>
+                  <Button 
+                    type="button"
+                    variant="outline" 
+                    className="w-full bg-white/10 border-white/20 text-white justify-between font-normal"
+                    onClick={openRoleModal}
+                  >
+                    <span className="flex items-center gap-2">
+                      {role ? (
+                        <>
+                          <div className={`p-1 rounded-full ${roles.find(r => r.value === role)?.color}`}>
+                            {roles.find(r => r.value === role)?.icon}
+                          </div>
+                          <span>{roles.find(r => r.value === role)?.label}</span>
+                        </>
+                      ) : (
+                        "Select your role"
+                      )}
+                    </span>
+                    <span>▼</span>
+                  </Button>
+                </div>
+              )}
             </CardContent>
             <CardFooter>
               <Button type="submit" className="w-full bg-white text-blue-700 hover:bg-white/90">
