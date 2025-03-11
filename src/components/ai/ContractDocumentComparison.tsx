@@ -1,6 +1,5 @@
-
 import { useState } from "react";
-import { Files, ArrowRight, AlertCircle, CheckCircle, Percent, FileText, LayoutPanelLeft, LayoutPanelRight, Diff } from "lucide-react";
+import { Files, ArrowRight, AlertCircle, CheckCircle, Percent, FileText, LayoutPanelLeft, PanelRight, Diff } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
