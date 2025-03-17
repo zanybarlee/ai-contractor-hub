@@ -69,7 +69,7 @@ const ForensicSearch = () => {
                   <SelectValue placeholder="Document Type" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All Types</SelectItem>
+                  <SelectItem value="all-types">All Types</SelectItem>
                   <SelectItem value="correspondence">Correspondence</SelectItem>
                   <SelectItem value="siteInstruction">Site Instructions</SelectItem>
                   <SelectItem value="contractClause">Contract Clauses</SelectItem>

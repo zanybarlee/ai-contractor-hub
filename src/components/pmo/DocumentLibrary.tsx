@@ -101,7 +101,7 @@ export const DocumentLibrary = () => {
               <SelectValue placeholder="Document Type" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">All Types</SelectItem>
+              <SelectItem value="all-types">All Types</SelectItem>
               {documentTypes.map(type => (
                 <SelectItem key={type} value={type}>{type}</SelectItem>
               ))}
