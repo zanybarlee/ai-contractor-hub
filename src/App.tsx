@@ -19,6 +19,7 @@ import LandingPage from "./pages/LandingPage";
 import ContractorAdministrator from "./pages/ContractorAdministrator";
 import ContractsPMO from "./pages/ContractsPMO";
 import Forensics from "./pages/Forensics";
+import Contractors from "./pages/Contractors";
 
 const queryClient = new QueryClient();
 
@@ -38,6 +39,7 @@ const App = () => (
           <Route path="/change-orders" element={<ChangeOrders />} />
           <Route path="/collaboration" element={<Collaboration />} />
           <Route path="/contractor-administrator" element={<ContractorAdministrator />} />
+          <Route path="/contractors" element={<Contractors />} />
           <Route path="/contracts-pmo" element={<ContractsPMO />} />
           <Route path="/forensics" element={<Forensics />} />
           <Route path="/settings" element={<Settings />} />
