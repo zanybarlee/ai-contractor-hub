@@ -13,7 +13,7 @@ import {
   DialogTrigger 
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import DocumentUploadForm from '@/components/contractor-admin/DocumentUploadForm';
+import DocumentUploadForm from '@/components/contractor-admin/document-upload/DocumentUploadForm';
 import { Plus } from 'lucide-react';
 import { Document, getDocuments } from '@/lib/contractorAdmin';
 
