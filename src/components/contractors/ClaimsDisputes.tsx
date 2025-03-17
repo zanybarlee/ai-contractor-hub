@@ -51,7 +51,7 @@ const ClaimsDisputes: React.FC = () => {
                       <TableCell>{claim.amount}</TableCell>
                       <TableCell>
                         <Badge variant={
-                          claim.status === 'approved' ? "success" : 
+                          claim.status === 'approved' ? "secondary" : 
                           claim.status === 'rejected' ? "destructive" : 
                           claim.status === 'pending' ? "default" : 
                           "outline"
