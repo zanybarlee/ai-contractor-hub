@@ -1,5 +1,5 @@
 
-import { Home, FileText, AlertTriangle, Users, Settings, GitBranch, Brain, Scale, LogOut } from "lucide-react";
+import { Home, FileText, AlertTriangle, Users, Settings, GitBranch, Brain, Scale, LogOut, ClipboardCheck } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -9,6 +9,7 @@ const navigation = [
   { name: "Dashboard", icon: Home, href: "/dashboard" },
   { name: "Contracts", icon: FileText, href: "/contracts" },
   { name: "Contract Intelligence", icon: Brain, href: "/contract-intelligence" },
+  { name: "Contractor Administrator", icon: ClipboardCheck, href: "/contractor-administrator" },
   { name: "Dispute Resolution", icon: Scale, href: "/dispute-resolution" },
   { name: "Risk Management", icon: AlertTriangle, href: "/risk-management" },
   { name: "Change Orders", icon: GitBranch, href: "/change-orders" },
