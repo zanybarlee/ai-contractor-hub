@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Sidebar from '@/components/Sidebar';
 import DocumentList from '@/components/contractor-admin/DocumentList';
@@ -15,9 +15,40 @@ import {
 import { Button } from '@/components/ui/button';
 import DocumentUploadForm from '@/components/contractor-admin/DocumentUploadForm';
 import { Plus } from 'lucide-react';
+import { Document, getDocuments } from '@/lib/contractorAdmin';
 
 const ContractorAdministrator = () => {
   const { toast } = useToast();
+  const [documents, setDocuments] = useState<Document[]>([]);
+  const [selectedDocument, setSelectedDocument] = useState<Document | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchDocuments = async () => {
+      try {
+        const data = await getDocuments();
+        setDocuments(data);
+      } catch (error) {
+        toast({
+          title: "Error",
+          description: "Failed to load documents",
+          variant: "destructive",
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchDocuments();
+  }, [toast]);
+
+  const handleSelectDocument = (document: Document) => {
+    setSelectedDocument(document);
+    toast({
+      title: "Document Selected",
+      description: `You selected: ${document.title}`,
+    });
+  };
 
   return (
     <div className="flex min-h-screen bg-gray-50">
@@ -67,7 +98,14 @@ const ContractorAdministrator = () => {
                   <CardTitle>Contract Documents</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <DocumentList />
+                  {isLoading ? (
+                    <p className="text-center py-4">Loading documents...</p>
+                  ) : (
+                    <DocumentList 
+                      documents={documents} 
+                      onSelectDocument={handleSelectDocument} 
+                    />
+                  )}
                 </CardContent>
               </Card>
             </TabsContent>
