@@ -17,6 +17,7 @@ import Collaboration from "./pages/Collaboration";
 import Settings from "./pages/Settings";
 import LandingPage from "./pages/LandingPage";
 import ContractorAdministrator from "./pages/ContractorAdministrator";
+import ContractsPMO from "./pages/ContractsPMO";
 
 const queryClient = new QueryClient();
 
@@ -36,6 +37,7 @@ const App = () => (
           <Route path="/change-orders" element={<ChangeOrders />} />
           <Route path="/collaboration" element={<Collaboration />} />
           <Route path="/contractor-administrator" element={<ContractorAdministrator />} />
+          <Route path="/contracts-pmo" element={<ContractsPMO />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
