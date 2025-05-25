@@ -40,6 +40,7 @@ const Sidebar = () => {
         { title: "Generate Contract", href: "/contracts/generate" },
         { title: "SOP Payment Claim", href: "/sop-payment-claim" },
         { title: "SOP Payment Response", href: "/sop-payment-response" },
+        { title: "SOP Adjudication", href: "/sop-adjudication" },
       ],
     },
     {

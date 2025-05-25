@@ -22,6 +22,7 @@ import Forensics from "./pages/Forensics";
 import Contractors from "./pages/Contractors";
 import SOPPaymentClaim from "./pages/SOPPaymentClaim";
 import SOPPaymentResponse from "./pages/SOPPaymentResponse";
+import SOPAdjudication from "./pages/SOPAdjudication";
 
 const queryClient = new QueryClient();
 
@@ -37,6 +38,7 @@ const App = () => (
           <Route path="/contracts/:id" element={<ContractDetails />} />
           <Route path="/sop-payment-claim" element={<SOPPaymentClaim />} />
           <Route path="/sop-payment-response" element={<SOPPaymentResponse />} />
+          <Route path="/sop-adjudication" element={<SOPAdjudication />} />
           <Route path="/contract-intelligence" element={<ContractIntelligence />} />
           <Route path="/dispute-resolution" element={<DisputeResolution />} />
           <Route path="/risk-management" element={<RiskManagement />} />
