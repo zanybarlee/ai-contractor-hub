@@ -1,8 +1,7 @@
-
 export type ContractTemplate = {
   id: string;
   name: string;
-  type: 'FIDIC' | 'NEC' | 'AIA' | 'Bespoke';
+  type: 'FIDIC' | 'NEC' | 'AIA' | 'Bespoke' | 'SOP';
   description: string;
   sectors: string[];
   complexity: 'Low' | 'Medium' | 'High';
@@ -72,6 +71,22 @@ export const contractTemplates: ContractTemplate[] = [
     description: 'Customizable construction contract for small to medium projects',
     sectors: ['General Construction', 'Renovation'],
     complexity: 'Low',
+  },
+  {
+    id: 'sop-basic',
+    name: 'SOP Act Basic Contract',
+    type: 'SOP',
+    description: 'Building and Construction Industry Security of Payment Act compliant contract with essential payment terms',
+    sectors: ['Building', 'Construction', 'Infrastructure'],
+    complexity: 'Low',
+  },
+  {
+    id: 'sop-comprehensive',
+    name: 'SOP Act Comprehensive Contract',
+    type: 'SOP',
+    description: 'Full Building and Construction Industry Security of Payment Act contract with detailed payment claim procedures',
+    sectors: ['Building', 'Construction', 'Infrastructure', 'Civil Engineering'],
+    complexity: 'Medium',
   },
 ];
 
