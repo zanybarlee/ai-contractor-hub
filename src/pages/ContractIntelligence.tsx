@@ -8,7 +8,7 @@ import ContractMilestoneTracker from "@/components/ai/ContractMilestoneTracker";
 import ContractDocumentComparison from "@/components/ai/ContractDocumentComparison";
 
 const ContractIntelligence = () => {
-  const [activeTab, setActiveTab] = useState("chatbot");
+  const [activeTab, setActiveTab] = useState("ai-fullpage-chatbot");
 
   useEffect(() => {
     if (activeTab === "ai-fullpage-chatbot") {
@@ -49,15 +49,15 @@ const ContractIntelligence = () => {
           
           <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
             <TabsList className="w-full justify-start">
-              <TabsTrigger value="chatbot">AI Chatbot</TabsTrigger>
+              <TabsTrigger value="ai-fullpage-chatbot">AI FullPage Chatbot</TabsTrigger>
               <TabsTrigger value="milestones">Milestone Tracking</TabsTrigger>
               <TabsTrigger value="document-comparison">Document Analysis</TabsTrigger>
-              <TabsTrigger value="ai-fullpage-chatbot">AI FullPage Chatbot</TabsTrigger>
+              <TabsTrigger value="chatbot">AI Chatbot</TabsTrigger>
             </TabsList>
 
-            <TabsContent value="chatbot">
-              <div className="h-[600px]">
-                <ContractAIChatbot initialMessage="Hello! I'm your Contract Intelligence Assistant. I can help you analyze contracts, track milestones, and provide legal insights. What would you like to know?" />
+            <TabsContent value="ai-fullpage-chatbot">
+              <div className="h-[600px] w-full">
+                <flowise-fullchatbot></flowise-fullchatbot>
               </div>
             </TabsContent>
 
@@ -69,9 +69,9 @@ const ContractIntelligence = () => {
               <ContractDocumentComparison />
             </TabsContent>
 
-            <TabsContent value="ai-fullpage-chatbot">
-              <div className="h-[600px] w-full">
-                <flowise-fullchatbot></flowise-fullchatbot>
+            <TabsContent value="chatbot">
+              <div className="h-[600px]">
+                <ContractAIChatbot initialMessage="Hello! I'm your Contract Intelligence Assistant. I can help you analyze contracts, track milestones, and provide legal insights. What would you like to know?" />
               </div>
             </TabsContent>
           </Tabs>
