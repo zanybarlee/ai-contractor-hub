@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
@@ -40,6 +39,7 @@ const Sidebar = () => {
         { title: "All Contracts", href: "/contracts" },
         { title: "Generate Contract", href: "/contracts/generate" },
         { title: "SOP Payment Claim", href: "/sop-payment-claim" },
+        { title: "SOP Payment Response", href: "/sop-payment-response" },
       ],
     },
     {
