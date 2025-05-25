@@ -1,14 +1,17 @@
-
-import { CheckCircle, FileText } from "lucide-react";
+import { CheckCircle, FileText, ArrowRight } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 interface CustomizeAndGenerateProps {
   isSOPContract: boolean;
 }
 
 const CustomizeAndGenerate: React.FC<CustomizeAndGenerateProps> = ({ isSOPContract }) => {
+  const navigate = useNavigate();
+
   return (
     <Card className="max-w-3xl mx-auto">
       <CardHeader>
@@ -43,6 +46,25 @@ const CustomizeAndGenerate: React.FC<CustomizeAndGenerateProps> = ({ isSOPContra
                 <div>
                   <p className="text-sm font-medium text-green-900">Dispute Resolution</p>
                   <p className="text-sm text-green-700">Built-in adjudication procedures for rapid dispute resolution as per SOP Act requirements.</p>
+                </div>
+              </div>
+            </div>
+            
+            <div className="bg-blue-50 p-4 rounded-lg">
+              <div className="flex items-start gap-3">
+                <FileText className="h-5 w-5 text-blue-600 shrink-0 mt-0.5" />
+                <div className="flex-1">
+                  <p className="text-sm font-medium text-blue-900">Need to create a Payment Claim?</p>
+                  <p className="text-sm text-blue-700 mb-3">Generate SOP Act compliant payment claims using our specialized form.</p>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={() => navigate('/sop-payment-claim')}
+                    className="flex items-center gap-2"
+                  >
+                    Create Payment Claim
+                    <ArrowRight className="h-4 w-4" />
+                  </Button>
                 </div>
               </div>
             </div>
