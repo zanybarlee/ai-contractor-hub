@@ -52,7 +52,6 @@ const ContractIntelligence = () => {
               <TabsTrigger value="chatbot">AI Chatbot</TabsTrigger>
               <TabsTrigger value="milestones">Milestone Tracking</TabsTrigger>
               <TabsTrigger value="document-comparison">Document Analysis</TabsTrigger>
-              <TabsTrigger value="ai-assistant">AI Contract Assistant</TabsTrigger>
               <TabsTrigger value="ai-fullpage-chatbot">AI FullPage Chatbot</TabsTrigger>
             </TabsList>
 
@@ -68,16 +67,6 @@ const ContractIntelligence = () => {
 
             <TabsContent value="document-comparison">
               <ContractDocumentComparison />
-            </TabsContent>
-
-            <TabsContent value="ai-assistant">
-              <div className="h-[600px] w-full">
-                <iframe
-                  src="http://127.0.0.1:3001/chatbot/b9fd309f-1f06-4c8f-a9f0-9d34f9fd3040"
-                  className="w-full h-full border border-gray-300 rounded-lg"
-                  title="AI Contract Assistant"
-                />
-              </div>
             </TabsContent>
 
             <TabsContent value="ai-fullpage-chatbot">
