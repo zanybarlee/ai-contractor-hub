@@ -23,6 +23,7 @@ import Contractors from "./pages/Contractors";
 import SOPPaymentClaim from "./pages/SOPPaymentClaim";
 import SOPPaymentResponse from "./pages/SOPPaymentResponse";
 import SOPAdjudication from "./pages/SOPAdjudication";
+import ChatbotFAB from "./components/ai/ChatbotFAB";
 
 const queryClient = new QueryClient();
 
@@ -51,6 +52,10 @@ const App = () => (
           <Route path="/settings" element={<Settings />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
+        
+        {/* Global AI Contract Assistant Chatbot */}
+        <ChatbotFAB />
+        
       </BrowserRouter>
       <Toaster />
       <Sonner />
