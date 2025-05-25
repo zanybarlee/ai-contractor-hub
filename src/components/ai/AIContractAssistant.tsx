@@ -158,22 +158,22 @@ const AIContractAssistant = ({ isOpen, onClose }: AIContractAssistantProps) => {
 
   return (
     <div className="fixed bottom-4 right-4 z-50">
-      <Card className="w-96 h-[500px] flex flex-col shadow-lg">
-        <CardHeader className="border-b flex-row items-center justify-between space-y-0 pb-3">
+      <Card className="w-96 h-[500px] flex flex-col shadow-2xl border-2 bg-white">
+        <CardHeader className="border-b border-gray-200 flex-row items-center justify-between space-y-0 pb-3 bg-white">
           <div className="flex items-center gap-3">
             <Avatar className="h-8 w-8">
               <AvatarFallback className="bg-blue-100 text-blue-700">
                 <Bot className="h-4 w-4" />
               </AvatarFallback>
             </Avatar>
-            <CardTitle className="text-lg">AI Contract Assistant</CardTitle>
+            <CardTitle className="text-lg text-gray-800">AI Contract Assistant</CardTitle>
           </div>
           <div className="flex items-center gap-1">
             <Button
               variant="ghost"
               size="icon"
               onClick={handleClearChat}
-              className="h-8 w-8"
+              className="h-8 w-8 hover:bg-gray-100"
               title="Clear chat"
             >
               <RefreshCw className="h-4 w-4" />
@@ -182,7 +182,7 @@ const AIContractAssistant = ({ isOpen, onClose }: AIContractAssistantProps) => {
               variant="ghost"
               size="icon"
               onClick={onClose}
-              className="h-8 w-8"
+              className="h-8 w-8 hover:bg-gray-100"
               title="Close chat"
             >
               <X className="h-4 w-4" />
@@ -190,7 +190,7 @@ const AIContractAssistant = ({ isOpen, onClose }: AIContractAssistantProps) => {
           </div>
         </CardHeader>
         
-        <CardContent className="flex-1 overflow-auto p-4">
+        <CardContent className="flex-1 overflow-auto p-4 bg-white">
           <div className="space-y-4">
             {messages.map((message) => (
               <div
@@ -205,7 +205,7 @@ const AIContractAssistant = ({ isOpen, onClose }: AIContractAssistantProps) => {
                   <Avatar className="h-8 w-8 flex-shrink-0">
                     <AvatarFallback className={
                       message.role === "user" 
-                        ? "bg-primary text-primary-foreground" 
+                        ? "bg-blue-600 text-white" 
                         : "bg-blue-100 text-blue-700"
                     }>
                       {message.role === "user" ? (
@@ -219,8 +219,8 @@ const AIContractAssistant = ({ isOpen, onClose }: AIContractAssistantProps) => {
                   <div
                     className={`rounded-lg p-3 ${
                       message.role === "user"
-                        ? "bg-primary text-primary-foreground"
-                        : "bg-muted"
+                        ? "bg-blue-600 text-white"
+                        : "bg-gray-100 text-gray-800"
                     }`}
                   >
                     <div className="text-sm whitespace-pre-wrap">{message.content}</div>
@@ -243,7 +243,7 @@ const AIContractAssistant = ({ isOpen, onClose }: AIContractAssistantProps) => {
                       <Bot className="h-4 w-4" />
                     </AvatarFallback>
                   </Avatar>
-                  <div className="bg-muted rounded-lg p-3">
+                  <div className="bg-gray-100 rounded-lg p-3">
                     <div className="flex gap-1">
                       <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"></div>
                       <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
@@ -258,14 +258,14 @@ const AIContractAssistant = ({ isOpen, onClose }: AIContractAssistantProps) => {
           </div>
         </CardContent>
         
-        <CardFooter className="border-t p-4">
+        <CardFooter className="border-t border-gray-200 p-4 bg-white">
           <form onSubmit={handleSubmit} className="w-full flex gap-2">
             <Input
               placeholder="Ask about contracts..."
               value={input}
               onChange={(e) => setInput(e.target.value)}
               disabled={isQuerying}
-              className="flex-1"
+              className="flex-1 bg-white border-gray-300"
             />
             <Button type="submit" size="icon" disabled={isQuerying || !input.trim()}>
               <Send className="h-4 w-4" />
