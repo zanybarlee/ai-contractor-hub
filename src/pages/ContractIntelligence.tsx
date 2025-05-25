@@ -1,15 +1,42 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import AppHeader from "@/components/AppHeader";
 import Sidebar from "@/components/Sidebar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ContractAIChatbot from "@/components/ai/ContractAIChatbot";
 import ContractMilestoneTracker from "@/components/ai/ContractMilestoneTracker";
 import ContractDocumentComparison from "@/components/ai/ContractDocumentComparison";
-import { FullPageChat } from "flowise-embed-react";
 
 const ContractIntelligence = () => {
   const [activeTab, setActiveTab] = useState("chatbot");
+
+  useEffect(() => {
+    if (activeTab === "ai-fullpage-chatbot") {
+      // Clear any existing chatbot
+      const existingChatbot = document.querySelector('flowise-fullchatbot');
+      if (existingChatbot) {
+        existingChatbot.innerHTML = '';
+      }
+
+      // Create and inject the script
+      const script = document.createElement('script');
+      script.type = 'module';
+      script.innerHTML = `
+        import Chatbot from "https://www.cens.com.sg/akira/dist/web.js"
+        Chatbot.initFull({
+          chatflowid: "b9fd309f-1f06-4c8f-a9f0-9d34f9fd3040",
+          apiHost: "http://127.0.0.1:3001",
+        })
+      `;
+      
+      document.head.appendChild(script);
+
+      // Cleanup function
+      return () => {
+        document.head.removeChild(script);
+      };
+    }
+  }, [activeTab]);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -55,10 +82,7 @@ const ContractIntelligence = () => {
 
             <TabsContent value="ai-fullpage-chatbot">
               <div className="h-[600px] w-full">
-                <FullPageChat
-                  chatflowid="b9fd309f-1f06-4c8f-a9f0-9d34f9fd3040"
-                  apiHost="http://127.0.0.1:3001"
-                />
+                <flowise-fullchatbot></flowise-fullchatbot>
               </div>
             </TabsContent>
           </Tabs>
