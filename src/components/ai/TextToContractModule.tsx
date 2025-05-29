@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { FileText, Wand2, Download, FileCheck, Trash2 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,11 +10,43 @@ import { queryTextToContract } from "./textToContractService";
 
 const STORAGE_KEY = 'ai-generated-contract';
 
+interface SOPFormData {
+  paymentClaimReferenceNumber: string;
+  paymentClaimDate: string;
+  respondentName: string;
+  respondentAddress: string;
+  respondentPhone: string;
+  respondentFax: string;
+  respondentEmail: string;
+  respondentPersonInCharge: string;
+  claimantName: string;
+  claimantAddress: string;
+  claimantPhone: string;
+  claimantFax: string;
+  claimantEmail: string;
+  claimantPersonInCharge: string;
+  projectTitle: string;
+  contractIdentification: string;
+  contractNumber: string;
+  contractDate: string;
+  referencePeriodFrom: string;
+  referencePeriodTo: string;
+  workCarriedOut: string;
+  unfixedGoods: string;
+  nominatedSubcontractor: string;
+  unfixedGoodsNominated: string;
+  totalAmount: string;
+  lessAmountPaid: string;
+  claimAmount: string;
+  claimAmountWords: string;
+}
+
 const TextToContractModule = () => {
   const [inputText, setInputText] = useState("");
   const [generatedContract, setGeneratedContract] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [displayFormat, setDisplayFormat] = useState<"contract" | "sop-claim">("contract");
+  const [sopFormData, setSOPFormData] = useState<SOPFormData | null>(null);
   const { toast } = useToast();
 
   // Load persisted contract on component mount
@@ -21,6 +54,7 @@ const TextToContractModule = () => {
     const savedContract = localStorage.getItem(STORAGE_KEY);
     if (savedContract) {
       setGeneratedContract(savedContract);
+      parseContractToSOPForm(savedContract);
     }
   }, []);
 
@@ -28,8 +62,64 @@ const TextToContractModule = () => {
   useEffect(() => {
     if (generatedContract) {
       localStorage.setItem(STORAGE_KEY, generatedContract);
+      parseContractToSOPForm(generatedContract);
     }
   }, [generatedContract]);
+
+  const parseContractToSOPForm = (contractText: string) => {
+    try {
+      // Parse the generated contract text to extract SOP form data
+      const lines = contractText.split('\n');
+      const formData: SOPFormData = {
+        paymentClaimReferenceNumber: extractValue(contractText, /Payment Claim Reference Number[:\s]*([^\n]+)/i) || '',
+        paymentClaimDate: extractValue(contractText, /Payment Claim Date[:\s]*([^\n]+)/i) || '',
+        respondentName: extractValue(contractText, /To[:\s]*\*?\*?([^*\n]+)/i) || '',
+        respondentAddress: extractValue(contractText, /Service Address[:\s]*([^\n]+)/i) || '',
+        respondentPhone: extractValue(contractText, /Tel[:\s]*([^\n|]+)/i) || '',
+        respondentFax: extractValue(contractText, /Fax[:\s]*([^\n|]+)/i) || '',
+        respondentEmail: extractValue(contractText, /Email[:\s]*([^\n]+)/i) || '',
+        respondentPersonInCharge: extractValue(contractText, /Person-in-charge[:\s]*([^\n]+)/i) || '',
+        claimantName: extractValue(contractText, /From[:\s]*\*?\*?([^*\n]+)/i) || '',
+        claimantAddress: extractAfterKeyword(contractText, 'From', 'Service Address') || '',
+        claimantPhone: extractAfterKeyword(contractText, 'From', 'Tel') || '',
+        claimantFax: extractAfterKeyword(contractText, 'From', 'Fax') || '',
+        claimantEmail: extractAfterKeyword(contractText, 'From', 'Email') || '',
+        claimantPersonInCharge: extractAfterKeyword(contractText, 'From', 'Person-in-charge') || '',
+        projectTitle: extractValue(contractText, /Project Title[:\s]*([^\n]+)/i) || '',
+        contractIdentification: extractValue(contractText, /Contract Title[\/\s]*Description[:\s]*([^\n]+)/i) || '',
+        contractNumber: extractValue(contractText, /Contract Number[:\s]*([^\n]+)/i) || '',
+        contractDate: extractValue(contractText, /Date Contract Made[:\s]*([^\n]+)/i) || '',
+        referencePeriodFrom: extractValue(contractText, /From[:\s]*(\d{2}\/\d{2}\/\d{4})/i) || '',
+        referencePeriodTo: extractValue(contractText, /to[:\s]*(\d{2}\/\d{2}\/\d{4})/i) || '',
+        workCarriedOut: extractValue(contractText, /Work carried out by Contractor[:\s]*\$?([0-9,]+\.?\d*)/i) || '',
+        unfixedGoods: extractValue(contractText, /Unfixed goods & materials[:\s]*\$?([0-9,]+\.?\d*)/i) || '',
+        nominatedSubcontractor: extractValue(contractText, /Nominated sub-contractor[:\s]*([^\n]+)/i) || '-',
+        unfixedGoodsNominated: extractValue(contractText, /Unfixed goods & materials of nominated[:\s]*([^\n]+)/i) || '-',
+        totalAmount: extractValue(contractText, /Total[:\s]*\$?([0-9,]+\.?\d*)/i) || '',
+        lessAmountPaid: extractValue(contractText, /Less amounts previously paid[:\s]*\$?([0-9,]+\.?\d*)/i) || '',
+        claimAmount: extractValue(contractText, /CLAIM AMOUNT[:\s]*\*?\*?\$?([0-9,]+\.?\d*)/i) || '',
+        claimAmountWords: extractValue(contractText, /Claim Amount in Words[:\s]*([^\n]+)/i) || ''
+      };
+
+      setSOPFormData(formData);
+    } catch (error) {
+      console.error('Error parsing contract to SOP form:', error);
+    }
+  };
+
+  const extractValue = (text: string, regex: RegExp): string | null => {
+    const match = text.match(regex);
+    return match ? match[1].trim().replace(/\*/g, '') : null;
+  };
+
+  const extractAfterKeyword = (text: string, startKeyword: string, targetKeyword: string): string => {
+    const startIndex = text.indexOf(startKeyword);
+    if (startIndex === -1) return '';
+    
+    const fromSection = text.substring(startIndex);
+    const match = fromSection.match(new RegExp(`${targetKeyword}[:\\s]*([^\\n|]+)`, 'i'));
+    return match ? match[1].trim() : '';
+  };
 
   const handleGenerateContract = async () => {
     if (!inputText.trim()) {
@@ -79,6 +169,7 @@ const TextToContractModule = () => {
 
   const handleClearContract = () => {
     setGeneratedContract("");
+    setSOPFormData(null);
     localStorage.removeItem(STORAGE_KEY);
     setDisplayFormat("contract");
     toast({
@@ -90,6 +181,7 @@ const TextToContractModule = () => {
   const handleClearAll = () => {
     setInputText("");
     setGeneratedContract("");
+    setSOPFormData(null);
     localStorage.removeItem(STORAGE_KEY);
     setDisplayFormat("contract");
   };
@@ -142,119 +234,135 @@ const TextToContractModule = () => {
   };
 
   const renderSOPClaimAsText = () => {
-    return `Sample 2: Payment claim
+    if (!sopFormData) {
+      return `Sample Payment Claim Form - No contract data parsed yet.`;
+    }
 
-Payment claim reference number: ________________    Payment claim date: (DD/MM/YY) ________________
+    return `Payment Claim
 
-To: (Respondent's name or registered company / organisation name)
-Service address:                                    Tel:
-                                                   Fax:
-                                                   Email:
+Payment claim reference number: ${sopFormData.paymentClaimReferenceNumber}    Payment claim date: ${sopFormData.paymentClaimDate}
 
-Person-in-charge (Respondent): (Name of authorised representative, designation, contact details)
+To: ${sopFormData.respondentName}
+Service address: ${sopFormData.respondentAddress}                    Tel: ${sopFormData.respondentPhone}
+                                                   Fax: ${sopFormData.respondentFax}
+                                                   Email: ${sopFormData.respondentEmail}
 
-From: (Claimant's name or registered company / organisation name)
-Service address:                                    Tel:
-                                                   Fax:
-                                                   Email:
+Person-in-charge (Respondent): ${sopFormData.respondentPersonInCharge}
 
-Person-in-charge (Claimant): (Name of authorised representative, designation, contact details)
+From: ${sopFormData.claimantName}
+Service address: ${sopFormData.claimantAddress}                    Tel: ${sopFormData.claimantPhone}
+                                                   Fax: ${sopFormData.claimantFax}
+                                                   Email: ${sopFormData.claimantEmail}
+
+Person-in-charge (Claimant): ${sopFormData.claimantPersonInCharge}
 
 Particulars of Contract
-Project title:
+Project title: ${sopFormData.projectTitle}
 
-*Contract identification:                           Reference period of this claim:
-(e.g. contract title, contract number / Invoice     From (DD/MM/YY) to (DD/MM/YY)
-number, date contract made)
+Contract identification: ${sopFormData.contractIdentification}           Reference period of this claim:
+Contract number: ${sopFormData.contractNumber}                          From ${sopFormData.referencePeriodFrom} to ${sopFormData.referencePeriodTo}
+Date contract made: ${sopFormData.contractDate}
 
-Payment Claim Details
-[THIS IS TABLE: Payment claim details with columns for Description of Item/Variation reference no., Total value of Item/variation ($), Quantity/Quantum (e.g. % Completed/Delivered), and Amount claimed for item ($)]
+Amount of Payment Claim
+Work carried out by Contractor                                           $${sopFormData.workCarriedOut}
+Unfixed goods & materials                                               $${sopFormData.unfixedGoods}
+Nominated sub-contractor, suppliers or designated PC work               ${sopFormData.nominatedSubcontractor}
+Unfixed goods & materials of nominated sub-contractor, suppliers        ${sopFormData.unfixedGoodsNominated}
 
-Total amount claimed                                                               $
-Less amount previously paid                                                        $
-*Payment claim amount                                                             $
+Total amount claimed                                                     $${sopFormData.totalAmount}
+Less amount previously paid                                              $${sopFormData.lessAmountPaid}
+Payment claim amount                                                     $${sopFormData.claimAmount}
 
-Name of claimant / authorised
-representative:                          _________________________________
-
-Authorised signature &
-Organisation stamp (if applicable):      _________________________________
-
-Date:                                   _________________ (DD/MM/YY)
+Claim amount in words: ${sopFormData.claimAmountWords}
 
 * Inputs are mandatory under the Building and Construction Industry Security of Payment Act.`;
   };
 
   const renderSOPClaimForm = () => {
+    if (!sopFormData) {
+      return (
+        <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+          <div className="text-center py-8 text-gray-500">
+            <p>No contract data available to populate SOP form.</p>
+            <p className="text-sm mt-1">Generate a contract first to see the mapped SOP form.</p>
+          </div>
+        </div>
+      );
+    }
+
     return (
       <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
         <div className="space-y-6 font-mono text-sm">
-          <div className="text-lg font-bold mb-4">Sample 2: Payment claim</div>
+          <div className="text-lg font-bold mb-4">Payment Claim</div>
           
           <div className="grid grid-cols-2 gap-4">
-            <div>Payment claim reference number: ________________</div>
-            <div>Payment claim date: (DD/MM/YY) ________________</div>
+            <div>Payment claim reference number: {sopFormData.paymentClaimReferenceNumber || '________________'}</div>
+            <div>Payment claim date: {sopFormData.paymentClaimDate || '________________'}</div>
           </div>
 
           <div className="border border-gray-400 p-4 space-y-2">
-            <div className="font-semibold">To: (Respondent's name or registered company / organisation name)</div>
+            <div className="font-semibold">To: {sopFormData.respondentName || '(Respondent\'s name or registered company / organisation name)'}</div>
             <div className="grid grid-cols-2 gap-4">
-              <div>Service address:</div>
+              <div>Service address: {sopFormData.respondentAddress}</div>
               <div className="space-y-1">
-                <div>Tel:</div>
-                <div>Fax:</div>
-                <div>Email:</div>
+                <div>Tel: {sopFormData.respondentPhone}</div>
+                <div>Fax: {sopFormData.respondentFax}</div>
+                <div>Email: {sopFormData.respondentEmail}</div>
               </div>
             </div>
-            <div>Person-in-charge (Respondent): (Name of authorised representative, designation, contact details)</div>
+            <div>Person-in-charge (Respondent): {sopFormData.respondentPersonInCharge || '(Name of authorised representative, designation, contact details)'}</div>
           </div>
 
           <div className="border border-gray-400 p-4 space-y-2">
-            <div className="font-semibold">From: (Claimant's name or registered company / organisation name)</div>
+            <div className="font-semibold">From: {sopFormData.claimantName || '(Claimant\'s name or registered company / organisation name)'}</div>
             <div className="grid grid-cols-2 gap-4">
-              <div>Service address:</div>
+              <div>Service address: {sopFormData.claimantAddress}</div>
               <div className="space-y-1">
-                <div>Tel:</div>
-                <div>Fax:</div>
-                <div>Email:</div>
+                <div>Tel: {sopFormData.claimantPhone}</div>
+                <div>Fax: {sopFormData.claimantFax}</div>
+                <div>Email: {sopFormData.claimantEmail}</div>
               </div>
             </div>
-            <div>Person-in-charge (Claimant): (Name of authorised representative, designation, contact details)</div>
+            <div>Person-in-charge (Claimant): {sopFormData.claimantPersonInCharge || '(Name of authorised representative, designation, contact details)'}</div>
           </div>
 
           <div className="border border-gray-400 p-4 space-y-2">
             <div className="font-bold">Particulars of Contract</div>
-            <div>Project title:</div>
+            <div>Project title: {sopFormData.projectTitle}</div>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <div>*Contract identification:</div>
-                <div className="text-xs italic">(e.g. contract title, contract number / Invoice number, date contract made)</div>
+                <div>Contract identification:</div>
+                <div className="text-xs">{sopFormData.contractIdentification}</div>
+                <div className="text-xs">Contract number: {sopFormData.contractNumber}</div>
+                <div className="text-xs">Date contract made: {sopFormData.contractDate}</div>
               </div>
               <div>
                 <div>Reference period of this claim:</div>
-                <div>From (DD/MM/YY) to (DD/MM/YY)</div>
+                <div>From {sopFormData.referencePeriodFrom} to {sopFormData.referencePeriodTo}</div>
               </div>
             </div>
           </div>
 
           <div className="space-y-2">
-            <div className="font-bold">Payment Claim Details</div>
+            <div className="font-bold">Amount of Payment Claim</div>
             <div className="border border-gray-400">
               <table className="w-full text-xs">
-                <thead>
-                  <tr className="border-b border-gray-400">
-                    <th className="border-r border-gray-400 p-2 text-left">*Description of Item / Variation reference no.</th>
-                    <th className="border-r border-gray-400 p-2 text-left">Total value of Item / variation ($)</th>
-                    <th className="border-r border-gray-400 p-2 text-left">*Quantity / Quantum (e.g. % Completed / Delivered)</th>
-                    <th className="p-2 text-left">*Amount claimed for item ($) (Supported with relevant calculations* and attachments, if any)</th>
-                  </tr>
-                </thead>
                 <tbody>
-                  <tr>
-                    <td className="border-r border-gray-400 p-2 h-20"></td>
-                    <td className="border-r border-gray-400 p-2"></td>
-                    <td className="border-r border-gray-400 p-2"></td>
-                    <td className="p-2"></td>
+                  <tr className="border-b border-gray-400">
+                    <td className="p-2">Work carried out by Contractor</td>
+                    <td className="p-2 text-right">${sopFormData.workCarriedOut}</td>
+                  </tr>
+                  <tr className="border-b border-gray-400">
+                    <td className="p-2">Unfixed goods & materials</td>
+                    <td className="p-2 text-right">${sopFormData.unfixedGoods}</td>
+                  </tr>
+                  <tr className="border-b border-gray-400">
+                    <td className="p-2">Nominated sub-contractor, suppliers or designated PC work</td>
+                    <td className="p-2 text-right">{sopFormData.nominatedSubcontractor}</td>
+                  </tr>
+                  <tr className="border-b border-gray-400">
+                    <td className="p-2">Unfixed goods & materials of nominated sub-contractor, suppliers</td>
+                    <td className="p-2 text-right">{sopFormData.unfixedGoodsNominated}</td>
                   </tr>
                 </tbody>
               </table>
@@ -265,15 +373,15 @@ Date:                                   _________________ (DD/MM/YY)
                 <tbody>
                   <tr className="border-b border-gray-400">
                     <td className="p-2 font-semibold">Total amount claimed</td>
-                    <td className="p-2 text-right">$</td>
+                    <td className="p-2 text-right">${sopFormData.totalAmount}</td>
                   </tr>
                   <tr className="border-b border-gray-400">
                     <td className="p-2 font-semibold">Less amount previously paid</td>
-                    <td className="p-2 text-right">$</td>
+                    <td className="p-2 text-right">${sopFormData.lessAmountPaid}</td>
                   </tr>
                   <tr>
-                    <td className="p-2 font-bold">*Payment claim amount</td>
-                    <td className="p-2 text-right font-bold">$</td>
+                    <td className="p-2 font-bold">Payment claim amount</td>
+                    <td className="p-2 text-right font-bold">${sopFormData.claimAmount}</td>
                   </tr>
                 </tbody>
               </table>
@@ -281,6 +389,7 @@ Date:                                   _________________ (DD/MM/YY)
           </div>
 
           <div className="space-y-4">
+            <div>Claim amount in words: {sopFormData.claimAmountWords}</div>
             <div>Name of claimant / authorised representative: _________________________________</div>
             <div>Authorised signature & Organisation stamp (if applicable): _________________________________</div>
             <div>Date: _________________ (DD/MM/YY)</div>
@@ -301,7 +410,7 @@ Date:                                   _________________ (DD/MM/YY)
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Wand2 className="h-5 w-5" />
-            AI Contract Generator
+            Text to Contract
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
