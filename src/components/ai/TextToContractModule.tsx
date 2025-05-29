@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { FileText, Wand2, Download } from "lucide-react";
+import { FileText, Wand2, Download, FileCheck } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -12,6 +12,7 @@ const TextToContractModule = () => {
   const [inputText, setInputText] = useState("");
   const [generatedContract, setGeneratedContract] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [displayFormat, setDisplayFormat] = useState<"contract" | "sop-claim">("contract");
   const { toast } = useToast();
 
   const handleGenerateContract = async () => {
@@ -46,11 +47,14 @@ const TextToContractModule = () => {
   const handleDownloadContract = () => {
     if (!generatedContract) return;
 
-    const blob = new Blob([generatedContract], { type: 'text/plain' });
+    const content = displayFormat === "sop-claim" ? renderSOPClaimAsText() : generatedContract;
+    const filename = displayFormat === "sop-claim" ? 'sop-payment-claim.txt' : 'generated-contract.txt';
+
+    const blob = new Blob([content], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'generated-contract.txt';
+    a.download = filename;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -60,6 +64,7 @@ const TextToContractModule = () => {
   const handleClearAll = () => {
     setInputText("");
     setGeneratedContract("");
+    setDisplayFormat("contract");
   };
 
   const formatContractText = (text: string) => {
@@ -107,6 +112,159 @@ const TextToContractModule = () => {
         </p>
       );
     }).filter(Boolean);
+  };
+
+  const renderSOPClaimAsText = () => {
+    return `Sample 2: Payment claim
+
+Payment claim reference number: ________________    Payment claim date: (DD/MM/YY) ________________
+
+To: (Respondent's name or registered company / organisation name)
+Service address:                                    Tel:
+                                                   Fax:
+                                                   Email:
+
+Person-in-charge (Respondent): (Name of authorised representative, designation, contact details)
+
+From: (Claimant's name or registered company / organisation name)
+Service address:                                    Tel:
+                                                   Fax:
+                                                   Email:
+
+Person-in-charge (Claimant): (Name of authorised representative, designation, contact details)
+
+Particulars of Contract
+Project title:
+
+*Contract identification:                           Reference period of this claim:
+(e.g. contract title, contract number / Invoice     From (DD/MM/YY) to (DD/MM/YY)
+number, date contract made)
+
+Payment Claim Details
+[THIS IS TABLE: Payment claim details with columns for Description of Item/Variation reference no., Total value of Item/variation ($), Quantity/Quantum (e.g. % Completed/Delivered), and Amount claimed for item ($)]
+
+Total amount claimed                                                               $
+Less amount previously paid                                                        $
+*Payment claim amount                                                             $
+
+Name of claimant / authorised
+representative:                          _________________________________
+
+Authorised signature &
+Organisation stamp (if applicable):      _________________________________
+
+Date:                                   _________________ (DD/MM/YY)
+
+* Inputs are mandatory under the Building and Construction Industry Security of Payment Act.`;
+  };
+
+  const renderSOPClaimForm = () => {
+    return (
+      <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+        <div className="space-y-6 font-mono text-sm">
+          <div className="text-lg font-bold mb-4">Sample 2: Payment claim</div>
+          
+          <div className="grid grid-cols-2 gap-4">
+            <div>Payment claim reference number: ________________</div>
+            <div>Payment claim date: (DD/MM/YY) ________________</div>
+          </div>
+
+          <div className="border border-gray-400 p-4 space-y-2">
+            <div className="font-semibold">To: (Respondent's name or registered company / organisation name)</div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>Service address:</div>
+              <div className="space-y-1">
+                <div>Tel:</div>
+                <div>Fax:</div>
+                <div>Email:</div>
+              </div>
+            </div>
+            <div>Person-in-charge (Respondent): (Name of authorised representative, designation, contact details)</div>
+          </div>
+
+          <div className="border border-gray-400 p-4 space-y-2">
+            <div className="font-semibold">From: (Claimant's name or registered company / organisation name)</div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>Service address:</div>
+              <div className="space-y-1">
+                <div>Tel:</div>
+                <div>Fax:</div>
+                <div>Email:</div>
+              </div>
+            </div>
+            <div>Person-in-charge (Claimant): (Name of authorised representative, designation, contact details)</div>
+          </div>
+
+          <div className="border border-gray-400 p-4 space-y-2">
+            <div className="font-bold">Particulars of Contract</div>
+            <div>Project title:</div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <div>*Contract identification:</div>
+                <div className="text-xs italic">(e.g. contract title, contract number / Invoice number, date contract made)</div>
+              </div>
+              <div>
+                <div>Reference period of this claim:</div>
+                <div>From (DD/MM/YY) to (DD/MM/YY)</div>
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <div className="font-bold">Payment Claim Details</div>
+            <div className="border border-gray-400">
+              <table className="w-full text-xs">
+                <thead>
+                  <tr className="border-b border-gray-400">
+                    <th className="border-r border-gray-400 p-2 text-left">*Description of Item / Variation reference no.</th>
+                    <th className="border-r border-gray-400 p-2 text-left">Total value of Item / variation ($)</th>
+                    <th className="border-r border-gray-400 p-2 text-left">*Quantity / Quantum (e.g. % Completed / Delivered)</th>
+                    <th className="p-2 text-left">*Amount claimed for item ($) (Supported with relevant calculations* and attachments, if any)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td className="border-r border-gray-400 p-2 h-20"></td>
+                    <td className="border-r border-gray-400 p-2"></td>
+                    <td className="border-r border-gray-400 p-2"></td>
+                    <td className="p-2"></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            
+            <div className="border border-gray-400">
+              <table className="w-full text-sm">
+                <tbody>
+                  <tr className="border-b border-gray-400">
+                    <td className="p-2 font-semibold">Total amount claimed</td>
+                    <td className="p-2 text-right">$</td>
+                  </tr>
+                  <tr className="border-b border-gray-400">
+                    <td className="p-2 font-semibold">Less amount previously paid</td>
+                    <td className="p-2 text-right">$</td>
+                  </tr>
+                  <tr>
+                    <td className="p-2 font-bold">*Payment claim amount</td>
+                    <td className="p-2 text-right font-bold">$</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <div>Name of claimant / authorised representative: _________________________________</div>
+            <div>Authorised signature & Organisation stamp (if applicable): _________________________________</div>
+            <div>Date: _________________ (DD/MM/YY)</div>
+          </div>
+
+          <div className="text-xs italic">
+            * Inputs are mandatory under the Building and Construction Industry Security of Payment Act.
+          </div>
+        </div>
+      </div>
+    );
   };
 
   return (
@@ -158,26 +316,54 @@ const TextToContractModule = () => {
               <FileText className="h-5 w-5" />
               Generated Contract
             </div>
-            {generatedContract && (
-              <Button 
-                variant="outline" 
-                size="sm"
-                onClick={handleDownloadContract}
-                className="gap-2"
-              >
-                <Download className="h-4 w-4" />
-                Download
-              </Button>
-            )}
+            <div className="flex items-center gap-2">
+              {generatedContract && (
+                <>
+                  <div className="flex gap-1">
+                    <Button 
+                      variant={displayFormat === "contract" ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => setDisplayFormat("contract")}
+                    >
+                      Contract
+                    </Button>
+                    <Button 
+                      variant={displayFormat === "sop-claim" ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => setDisplayFormat("sop-claim")}
+                      className="gap-1"
+                    >
+                      <FileCheck className="h-3 w-3" />
+                      SOP Form
+                    </Button>
+                  </div>
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={handleDownloadContract}
+                    className="gap-2"
+                  >
+                    <Download className="h-4 w-4" />
+                    Download
+                  </Button>
+                </>
+              )}
+            </div>
           </CardTitle>
         </CardHeader>
         <CardContent>
           {generatedContract ? (
-            <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
-              <div className="prose prose-sm max-w-none overflow-auto max-h-[500px]">
-                {formatContractText(generatedContract)}
+            displayFormat === "contract" ? (
+              <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+                <div className="prose prose-sm max-w-none overflow-auto max-h-[500px]">
+                  {formatContractText(generatedContract)}
+                </div>
               </div>
-            </div>
+            ) : (
+              <div className="overflow-auto max-h-[500px]">
+                {renderSOPClaimForm()}
+              </div>
+            )
           ) : (
             <div className="text-center py-12 text-gray-500">
               <FileText className="h-12 w-12 mx-auto mb-4 text-gray-300" />
