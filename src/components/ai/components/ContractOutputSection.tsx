@@ -1,3 +1,4 @@
+
 import { FileText, Download, FileCheck, Trash2, Printer } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -111,66 +112,69 @@ Claim amount in words: ${sopFormData.claimAmountWords}
             <FileText className="h-5 w-5" />
             Generated Contract
           </div>
-          <div className="flex items-center gap-2">
-            {generatedContract && (
-              <>
-                <div className="flex gap-1">
-                  <Button 
-                    variant={displayFormat === "contract" ? "default" : "outline"}
-                    size="sm"
-                    onClick={() => setDisplayFormat("contract")}
-                  >
-                    Contract
-                  </Button>
-                  <Button 
-                    variant={displayFormat === "sop-claim" ? "default" : "outline"}
-                    size="sm"
-                    onClick={() => setDisplayFormat("sop-claim")}
-                    className="gap-1"
-                  >
-                    <FileCheck className="h-3 w-3" />
-                    SOP Form
-                  </Button>
-                </div>
+          {generatedContract && (
+            <div className="flex flex-col gap-3">
+              {/* Format Toggle Buttons */}
+              <div className="flex gap-1">
+                <Button 
+                  variant={displayFormat === "contract" ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setDisplayFormat("contract")}
+                >
+                  Contract
+                </Button>
+                <Button 
+                  variant={displayFormat === "sop-claim" ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setDisplayFormat("sop-claim")}
+                  className="gap-1"
+                >
+                  <FileCheck className="h-3 w-3" />
+                  SOP Form
+                </Button>
+              </div>
+              
+              {/* Action Buttons */}
+              <div className="flex flex-wrap gap-2">
                 <Button 
                   variant="outline" 
                   size="sm"
                   onClick={printPDF}
-                  className="gap-2"
+                  className="gap-1"
                 >
-                  <Printer className="h-4 w-4" />
+                  <Printer className="h-3 w-3" />
                   Print PDF
                 </Button>
                 <Button 
                   variant="outline" 
                   size="sm"
                   onClick={generatePDF}
-                  className="gap-2"
+                  className="gap-1"
                 >
-                  <Download className="h-4 w-4" />
-                  Download PDF
+                  <Download className="h-3 w-3" />
+                  PDF
                 </Button>
                 <Button 
                   variant="outline" 
                   size="sm"
                   onClick={onDownload}
-                  className="gap-2"
+                  className="gap-1"
                 >
-                  <Download className="h-4 w-4" />
-                  Download Text
+                  <Download className="h-3 w-3" />
+                  Text
                 </Button>
                 <Button 
                   variant="outline" 
                   size="sm"
                   onClick={onClear}
-                  className="gap-2 text-red-600 hover:text-red-700 hover:bg-red-50"
+                  className="gap-1 text-red-600 hover:text-red-700 hover:bg-red-50"
                 >
-                  <Trash2 className="h-4 w-4" />
+                  <Trash2 className="h-3 w-3" />
                   Clear
                 </Button>
-              </>
-            )}
-          </div>
+              </div>
+            </div>
+          )}
         </CardTitle>
       </CardHeader>
       <CardContent>
