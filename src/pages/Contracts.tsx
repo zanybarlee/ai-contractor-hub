@@ -75,7 +75,7 @@ const Contracts = () => {
           <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
             <TabsList className="w-full justify-start">
               <TabsTrigger value="contracts">All Contracts</TabsTrigger>
-              <TabsTrigger value="ai-generator">AI Contract Generator</TabsTrigger>
+              <TabsTrigger value="ai-generator">Text to Contract</TabsTrigger>
             </TabsList>
 
             <TabsContent value="contracts">
