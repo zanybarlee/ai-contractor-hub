@@ -1,10 +1,10 @@
-
-import { FileText, Download, FileCheck, Trash2 } from "lucide-react";
+import { FileText, Download, FileCheck, Trash2, Printer } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { SOPFormData } from "../types/contractTypes";
 import { formatContractText } from "../utils/contractFormatter";
 import SOPClaimRenderer from "./SOPClaimRenderer";
+import jsPDF from 'jspdf';
 
 interface ContractOutputSectionProps {
   generatedContract: string;
@@ -68,6 +68,41 @@ Claim amount in words: ${sopFormData.claimAmountWords}
 * Inputs are mandatory under the Building and Construction Industry Security of Payment Act.`;
   };
 
+  const generatePDF = () => {
+    const pdf = new jsPDF();
+    const content = displayFormat === "sop-claim" ? renderSOPClaimAsText() : generatedContract;
+    const filename = displayFormat === "sop-claim" ? 'sop-payment-claim.pdf' : 'generated-contract.pdf';
+    
+    // Add title
+    pdf.setFontSize(16);
+    pdf.text(displayFormat === "sop-claim" ? "Payment Claim Form" : "Contract Document", 20, 20);
+    
+    // Add content with text wrapping
+    pdf.setFontSize(10);
+    const lines = pdf.splitTextToSize(content, 170);
+    pdf.text(lines, 20, 40);
+    
+    // Save the PDF
+    pdf.save(filename);
+  };
+
+  const printPDF = () => {
+    const pdf = new jsPDF();
+    const content = displayFormat === "sop-claim" ? renderSOPClaimAsText() : generatedContract;
+    
+    // Add title
+    pdf.setFontSize(16);
+    pdf.text(displayFormat === "sop-claim" ? "Payment Claim Form" : "Contract Document", 20, 20);
+    
+    // Add content with text wrapping
+    pdf.setFontSize(10);
+    const lines = pdf.splitTextToSize(content, 170);
+    pdf.text(lines, 20, 40);
+    
+    // Open print dialog
+    window.open(pdf.output('bloburl'), '_blank');
+  };
+
   return (
     <Card>
       <CardHeader>
@@ -100,11 +135,29 @@ Claim amount in words: ${sopFormData.claimAmountWords}
                 <Button 
                   variant="outline" 
                   size="sm"
+                  onClick={printPDF}
+                  className="gap-2"
+                >
+                  <Printer className="h-4 w-4" />
+                  Print PDF
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={generatePDF}
+                  className="gap-2"
+                >
+                  <Download className="h-4 w-4" />
+                  Download PDF
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="sm"
                   onClick={onDownload}
                   className="gap-2"
                 >
                   <Download className="h-4 w-4" />
-                  Download
+                  Download Text
                 </Button>
                 <Button 
                   variant="outline" 
