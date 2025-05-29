@@ -1,6 +1,5 @@
-
-import { useState } from "react";
-import { FileText, Wand2, Download, FileCheck } from "lucide-react";
+import { useState, useEffect } from "react";
+import { FileText, Wand2, Download, FileCheck, Trash2 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -8,12 +7,29 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
 import { queryTextToContract } from "./textToContractService";
 
+const STORAGE_KEY = 'ai-generated-contract';
+
 const TextToContractModule = () => {
   const [inputText, setInputText] = useState("");
   const [generatedContract, setGeneratedContract] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [displayFormat, setDisplayFormat] = useState<"contract" | "sop-claim">("contract");
   const { toast } = useToast();
+
+  // Load persisted contract on component mount
+  useEffect(() => {
+    const savedContract = localStorage.getItem(STORAGE_KEY);
+    if (savedContract) {
+      setGeneratedContract(savedContract);
+    }
+  }, []);
+
+  // Save contract to localStorage whenever it changes
+  useEffect(() => {
+    if (generatedContract) {
+      localStorage.setItem(STORAGE_KEY, generatedContract);
+    }
+  }, [generatedContract]);
 
   const handleGenerateContract = async () => {
     if (!inputText.trim()) {
@@ -31,7 +47,7 @@ const TextToContractModule = () => {
       setGeneratedContract(contractText);
       toast({
         title: "Contract Generated",
-        description: "Your contract has been successfully generated.",
+        description: "Your contract has been successfully generated and saved.",
       });
     } catch (error) {
       toast({
@@ -61,9 +77,20 @@ const TextToContractModule = () => {
     URL.revokeObjectURL(url);
   };
 
+  const handleClearContract = () => {
+    setGeneratedContract("");
+    localStorage.removeItem(STORAGE_KEY);
+    setDisplayFormat("contract");
+    toast({
+      title: "Contract Cleared",
+      description: "The generated contract has been cleared.",
+    });
+  };
+
   const handleClearAll = () => {
     setInputText("");
     setGeneratedContract("");
+    localStorage.removeItem(STORAGE_KEY);
     setDisplayFormat("contract");
   };
 
@@ -345,6 +372,15 @@ Date:                                   _________________ (DD/MM/YY)
                   >
                     <Download className="h-4 w-4" />
                     Download
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={handleClearContract}
+                    className="gap-2 text-red-600 hover:text-red-700 hover:bg-red-50"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                    Clear
                   </Button>
                 </>
               )}
