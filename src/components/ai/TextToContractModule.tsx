@@ -62,6 +62,53 @@ const TextToContractModule = () => {
     setGeneratedContract("");
   };
 
+  const formatContractText = (text: string) => {
+    // Split text into paragraphs and format
+    const paragraphs = text.split('\n\n');
+    
+    return paragraphs.map((paragraph, index) => {
+      const trimmedParagraph = paragraph.trim();
+      if (!trimmedParagraph) return null;
+
+      // Check if it's a heading (starts with numbers, all caps, or specific patterns)
+      const isHeading = /^(\d+\.|\d+\.\d+\.|\b[A-Z][A-Z\s]+\b:|\b(ARTICLE|SECTION|CLAUSE)\b)/i.test(trimmedParagraph);
+      const isSubHeading = /^[a-z]\)|\([a-z]\)|\d+\.\d+/i.test(trimmedParagraph);
+      const isBulletPoint = /^[-•*]\s/.test(trimmedParagraph);
+      const isNumberedList = /^\d+\.\s/.test(trimmedParagraph);
+
+      if (isHeading) {
+        return (
+          <h3 key={index} className="text-lg font-bold text-gray-900 mt-6 mb-3 border-b border-gray-200 pb-2">
+            {trimmedParagraph}
+          </h3>
+        );
+      }
+
+      if (isSubHeading) {
+        return (
+          <h4 key={index} className="text-md font-semibold text-gray-800 mt-4 mb-2">
+            {trimmedParagraph}
+          </h4>
+        );
+      }
+
+      if (isBulletPoint || isNumberedList) {
+        return (
+          <div key={index} className="ml-4 mb-2">
+            <p className="text-gray-700 leading-relaxed">{trimmedParagraph}</p>
+          </div>
+        );
+      }
+
+      // Regular paragraph
+      return (
+        <p key={index} className="text-gray-700 leading-relaxed mb-4 text-justify">
+          {trimmedParagraph}
+        </p>
+      );
+    }).filter(Boolean);
+  };
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
       {/* Input Section */}
@@ -126,10 +173,10 @@ const TextToContractModule = () => {
         </CardHeader>
         <CardContent>
           {generatedContract ? (
-            <div className="bg-gray-50 p-4 rounded-lg">
-              <pre className="whitespace-pre-wrap text-sm font-mono overflow-auto max-h-[400px]">
-                {generatedContract}
-              </pre>
+            <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+              <div className="prose prose-sm max-w-none overflow-auto max-h-[500px]">
+                {formatContractText(generatedContract)}
+              </div>
             </div>
           ) : (
             <div className="text-center py-12 text-gray-500">
