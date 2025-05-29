@@ -17,6 +17,20 @@ const SOPClaimRenderer: React.FC<SOPClaimRendererProps> = ({ sopFormData }) => {
     );
   }
 
+  const formatAmount = (amount: string) => {
+    if (!amount || amount === '-') return amount;
+    // If already formatted, return as is
+    if (amount.includes(',')) return amount;
+    
+    const numericAmount = parseFloat(amount);
+    if (isNaN(numericAmount)) return amount;
+    
+    return numericAmount.toLocaleString('en-US', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
+  };
+
   return (
     <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
       <div className="space-y-6 font-mono text-sm">
@@ -77,19 +91,19 @@ const SOPClaimRenderer: React.FC<SOPClaimRendererProps> = ({ sopFormData }) => {
               <tbody>
                 <tr className="border-b border-gray-400">
                   <td className="p-2">Work carried out by Contractor</td>
-                  <td className="p-2 text-right">${sopFormData.workCarriedOut}</td>
+                  <td className="p-2 text-right">${formatAmount(sopFormData.workCarriedOut)}</td>
                 </tr>
                 <tr className="border-b border-gray-400">
                   <td className="p-2">Unfixed goods & materials</td>
-                  <td className="p-2 text-right">${sopFormData.unfixedGoods}</td>
+                  <td className="p-2 text-right">${formatAmount(sopFormData.unfixedGoods)}</td>
                 </tr>
                 <tr className="border-b border-gray-400">
                   <td className="p-2">Nominated sub-contractor, suppliers or designated PC work</td>
-                  <td className="p-2 text-right">{sopFormData.nominatedSubcontractor}</td>
+                  <td className="p-2 text-right">{sopFormData.nominatedSubcontractor === '-' ? '-' : '$' + formatAmount(sopFormData.nominatedSubcontractor)}</td>
                 </tr>
                 <tr className="border-b border-gray-400">
                   <td className="p-2">Unfixed goods & materials of nominated sub-contractor, suppliers</td>
-                  <td className="p-2 text-right">{sopFormData.unfixedGoodsNominated}</td>
+                  <td className="p-2 text-right">{sopFormData.unfixedGoodsNominated === '-' ? '-' : '$' + formatAmount(sopFormData.unfixedGoodsNominated)}</td>
                 </tr>
               </tbody>
             </table>
@@ -100,15 +114,15 @@ const SOPClaimRenderer: React.FC<SOPClaimRendererProps> = ({ sopFormData }) => {
               <tbody>
                 <tr className="border-b border-gray-400">
                   <td className="p-2 font-semibold">Total amount claimed</td>
-                  <td className="p-2 text-right">${sopFormData.totalAmount}</td>
+                  <td className="p-2 text-right">${formatAmount(sopFormData.totalAmount)}</td>
                 </tr>
                 <tr className="border-b border-gray-400">
                   <td className="p-2 font-semibold">Less amount previously paid</td>
-                  <td className="p-2 text-right">${sopFormData.lessAmountPaid}</td>
+                  <td className="p-2 text-right">${formatAmount(sopFormData.lessAmountPaid)}</td>
                 </tr>
                 <tr>
                   <td className="p-2 font-bold">Payment claim amount</td>
-                  <td className="p-2 text-right font-bold">${sopFormData.claimAmount}</td>
+                  <td className="p-2 text-right font-bold">${formatAmount(sopFormData.claimAmount)}</td>
                 </tr>
               </tbody>
             </table>
